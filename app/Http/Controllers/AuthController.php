@@ -79,7 +79,7 @@ class AuthController extends Controller
                 return redirect('/trangchu')->with('success', 'Đăng nhập thành công!');
             } 
             else if ($khachhang->isAdmin == 1) {
-                return redirect('/trangchu')->with('success', 'Đăng nhập thành công!');
+                return redirect('/dashboard')->with('success', 'Đăng nhập thành công!');
             } 
         }
 

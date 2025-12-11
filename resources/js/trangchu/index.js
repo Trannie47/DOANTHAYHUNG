@@ -64,4 +64,31 @@ document.addEventListener('DOMContentLoaded', function () {
     const newFirst = document.querySelector('.news-item');
     if (newFirst) width = newFirst.offsetWidth;
   });
+
+//sanphamkhuyenmai
+const kmList = document.getElementById("kmList");
+const cardWidth = 250;
+
+document.querySelector(".km-left").onclick = () => {
+    kmList.scrollBy({ left: -cardWidth * 2, behavior: "smooth" });
+};
+document.querySelector(".km-right").onclick = () => {
+    kmList.scrollBy({ left: cardWidth * 2, behavior: "smooth" });
+};
+
+//sanphammoi
+const newList = document.getElementById("newList");
+
+document.querySelector(".new-left").onclick = () => {
+    newList.scrollBy({ left: -cardWidth * 2, behavior: "smooth" });
+};
+
+document.querySelector(".new-right").onclick = () => {
+    newList.scrollBy({ left: cardWidth * 2, behavior: "smooth" });
+};
+
+
+
+
+
 });

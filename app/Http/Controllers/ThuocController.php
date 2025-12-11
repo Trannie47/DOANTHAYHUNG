@@ -56,7 +56,16 @@ class ThuocController extends Controller
             ->orderBy('CreateAt', 'desc')
             ->limit(20)
             ->get();
+           
+    
 
-        return view('trangchu.index', compact('thuocKhuyenmai', 'thuocmoi'));
-    }
+
+    // Trả về view với TẤT CẢ dữ liệu
+    return view('trangchu.index', compact(
+        'thuocKhuyenmai',
+        'thuocmoi'
+        
+    ));
+}
+
 }

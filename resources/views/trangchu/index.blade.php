@@ -32,71 +32,85 @@
         </div>
     </div>
 
-    <!-- Sản phẩm -->
-    <section class="products">
+<!-- Sản phẩm -->
+<section class="products">
 
-        <!-- SẢN PHẨM KHUYẾN MÃI -->
-        <h2>Sản phẩm Khuyến Mãi</h2>
-        <div class="product-list">
+    <!-- SẢN PHẨM KHUYẾN MÃI -->
+    <h2>Sản phẩm Khuyến Mãi</h2>
 
-            @foreach ($thuocKhuyenmai as $item)
-            @php
+<div class="km-wrapper">
+
+    <button class="km-arrow km-left">&lt;</button>
+
+    <div class="product-list" id="kmList">
+
+        @foreach ($thuocKhuyenmai as $item)
+        @php
             $firstImage = is_array($item->HinhAnh) ? ($item->HinhAnh[0] ?? 'logo.png') : 'logo.png';
-            @endphp
-            <a class="product-item" href="{{ url('/thuoc/' .$item->maThuoc ) }}">
+        @endphp
 
-                {{-- Hình ảnh (lấy ảnh đầu tiên trong mảng JSON) --}}
-                <img src="{{ asset('asset/img/' . $firstImage) }}" alt="{{ $item->tenThuoc }}" />
+        <a class="product-item" href="{{ url('/thuoc/' .$item->maThuoc ) }}">
 
-                <h3>{{ $item->tenThuoc }}</h3>
+            <img src="{{ asset('asset/img/' . $firstImage) }}">
 
-                {{-- Giá gốc --}}
-                <p class="old-price">{{ number_format($item->GiaTien) }} đ</p>
+            <h3>{{ $item->tenThuoc }}</h3>
 
-                {{-- Giá khuyến mãi --}}
-                <p class="price">{{ number_format($item->giaKhuyenMai) }} đ/{{ $item->DVTinh }}</p>
+            <p class="old-price">{{ number_format($item->GiaTien) }} đ</p>
 
-                <button class="btn-item">
-                    <p>Chọn sản phẩm</p>
-                </button>
-            </a>
-            @endforeach
+            <p class="price">{{ number_format($item->giaKhuyenMai) }} đ/{{ $item->DVTinh }}</p>
 
-        </div>
+            <button class="btn-item">Chọn sản phẩm</button>
 
+        </a>
+        @endforeach
 
-        <!-- SẢN PHẨM MỚI -->
-        <h2>Sản phẩm mới</h2>
-        <div class="product-list">
+    </div>
 
-            @foreach ($thuocmoi as $item)
-            @php
+    <button class="km-arrow km-right">&gt;</button>
+
+</div>
+<h2>Sản phẩm mới</h2>
+
+<div class="km-wrapper">
+
+    <!-- Mũi tên trái -->
+     <button class="km-arrow new-left">&lt;</button>
+
+    <div class="product-list" id="newList">
+
+        @foreach ($thuocmoi as $item)
+        @php
             $firstImage = is_array($item->HinhAnh) ? ($item->HinhAnh[0] ?? 'logo.png') : 'logo.png';
-            @endphp
-            <a class="product-item" href="{{ url('/thuoc/' .$item->maThuoc ) }}">
+        @endphp
 
-                <img src="{{ asset('asset/img/' . $firstImage) }}" alt="{{ $item->tenThuoc }}" />
+        <a class="product-item" href="{{ url('/thuoc/'.$item->maThuoc) }}">
+            <img src="{{ asset('asset/img/'.$firstImage) }}">
+            <h3>{{ $item->tenThuoc }}</h3>
 
-                <h3>{{ $item->tenThuoc }}</h3>
-
-                {{-- Nếu có khuyến mãi thì hiện giá cũ --}}
-                @if ($item->giaKhuyenMai)
+            @if ($item->giaKhuyenMai)
                 <p class="old-price">{{ number_format($item->GiaTien) }} đ</p>
                 <p class="price">{{ number_format($item->giaKhuyenMai) }} đ/{{ $item->DVTinh }}</p>
-                @else
+            @else
                 <p class="price">{{ number_format($item->GiaTien) }} đ/{{ $item->DVTinh }}</p>
-                @endif
+            @endif
 
-                <button class="btn-item">
-                    <p>Chọn sản phẩm</p>
-                </button>
-            </a>
-            @endforeach
+            <button class="btn-item">Chọn sản phẩm</button>
+        </a>
 
-        </div>
+        @endforeach
 
-    </section>
+    </div>
 
+    <!-- Mũi tên phải -->
+    <button class="km-arrow new-right">&gt;</button>
+
+</div>
+
+
+</div>
+
+
+</section>
 
     <!-- Tin tức -->
     <section class="news">
@@ -114,23 +128,7 @@
                     </div>
                 </a>
 
-                {{--<a class="news-item" href="{{ route('chi-tiet-tin-tuc', 'sua-bi-do') }}">
-                <img src="{{ asset('asset/img/suabido.png') }}" alt="Sữa bí đỏ">
-                <div class="news-content">
-                    <span class="news-category">Sống khỏe</span>
-                    <h4>Sữa bí đỏ - bữa phụ bổ dưỡng cho bé yêu</h4>
-                    <p>Bữa phụ sữa bí đỏ được xem là một món đồ uống rất bổ dưỡng cho trẻ nhỏ...</p>
-                </div>
-                </a>
-
-                <a class="news-item" href="{{ route('chi-tiet-tin-tuc', 'gia-vi-rac-com') }}">
-                    <img src="{{ asset('asset/img/gvị rắc cơm.png') }}" alt="Gia vị rắc cơm">
-                    <div class="news-content">
-                        <span class="news-category">Sống khỏe</span>
-                        <h4>Gia vị rắc cơm cho bé: tăng thêm hương vị và dinh dưỡng</h4>
-                        <p>Gia vị là một trong những cách đơn giản giúp cơm thêm ngon miệng và đủ chất...</p>
-                    </div>
-                </a> --}}
+                
             </div>
 
             <button class="next-btn"><i class="fa-solid fa-chevron-right"></i></button>
