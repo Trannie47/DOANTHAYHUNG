@@ -1,0 +1,171 @@
+/* Footer Tổng */
+.footer {
+    background-color: #f8f8f8;
+    color: #333;
+    padding: 40px 20px;
+    font-family: Arial, sans-serif;
+}
+
+/* Container */
+.container {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    max-width: 90rem;
+    margin: auto;
+}
+
+/* Mỗi phần trong footer */
+.footer-section {
+    width: 22%;
+    min-width: 200px;
+}
+
+/* Tiêu đề */
+.footer-section h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+    color: #007bff;
+}
+
+/* Danh sách */
+.footer-section ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-section ul li {
+    margin-bottom: 8px;
+}
+
+.footer-section ul li a {
+    text-decoration: none;
+    color: #333;
+}
+
+.footer-section ul li a:hover {
+    color: #007bff;
+}
+
+/* Phần liên hệ */
+.footer-section p {
+    margin: 5px 0;
+}
+
+.footer-section a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.footer-section a:hover {
+    text-decoration: underline;
+}
+
+/* Fanpage */
+.fanpage img {
+    width: 100%;
+    max-width: 150px;
+}
+
+/* Footer Bottom */
+.footer-bottom {
+    text-align: center;
+    margin-top: 20px;
+    border-top: 1px solid #ddd;
+    padding-top: 10px;
+    font-size: 14px;
+}
+#map{
+    height: 300px; 
+    width: 100%; 
+    margin-top: 10px;
+    z-index: 30;
+}
+
+#backToTop {
+    position: fixed;
+    bottom: 40px;
+    right: 30px;
+    z-index: 99;
+    font-size: 20px;
+    background-color: #333;
+    color: white;
+    border: none;
+    outline: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: none;
+    transition: 0.3s;
+}
+#backToTop:hover {
+    background-color: #555;
+}
+
+
+/* chat box */
+ #open_chatbox {
+    position: fixed;
+    bottom: 6rem;
+    right: 30px;
+    z-index: 99;
+    font-size: 20px;
+    background-color: #333;
+    color: white;
+    border: none;
+    outline: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+
+  #chatbox {
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    width: 350px;
+    height: 500px;
+    display: none;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    z-index: 9999;
+    background: white;
+  }
+
+  #close_chatbox {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 10000;
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    font-size: 18px;
+    cursor: pointer;
+  }
+
+/* Responsive Mobile */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .footer-section {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
+    .fanpage img {
+        max-width: 100%;
+    }
+}

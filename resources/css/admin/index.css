@@ -1,0 +1,25 @@
+.donthuoc-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    padding: 0.5rem 0;
+}
+
+.donthuoc-item {
+    display: block;
+    background: white;
+    color: #333;
+    padding: 10px 14px;
+    border-radius: 6px;
+    border: 1px solid #e3e3e3;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.donthuoc-item:hover {
+    background: #f0f7ff;
+    border-color: #007bff;
+    color: #007bff;
+    box-shadow: 0 2px 6px rgba(0, 123, 255, 0.2);
+    transform: translateX(4px);
+}
