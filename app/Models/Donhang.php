@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property float $tongTien
  * @property string $DiaChi
  * @property string $SdtNguoiDat
+ * @property int $trangthai
  * 
  * @property Khachhang $khachhang
  * @property Collection|Chitietdonhang[] $chitietdonhangs
@@ -39,7 +40,8 @@ class Donhang extends Model
 		'ngaydat',
 		'tongTien',
 		'DiaChi',
-		'SdtNguoiDat'
+		'SdtNguoiDat',
+		'trangthai'
 	];
 
 	public function khachhang()
@@ -51,4 +53,14 @@ class Donhang extends Model
 	{
 		return $this->hasMany(Chitietdonhang::class, 'maDonHang');
 	}
+
+    public function getTrangThaiTextAttribute()
+{
+    return [
+        0 => 'Chờ duyệt',
+        1 => 'Đã duyệt',
+        2 => 'Bị hủy'
+    ][$this->trangthai] ?? 'Không xác định';
+}
+
 }

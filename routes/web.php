@@ -7,6 +7,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\GioHangController;
 use App\Http\Controllers\Admin\ThuocController as AdminThuocController;
 use App\Http\Controllers\Admin\LoaiThuocController;
+use App\Http\Controllers\Admin\DonHangController;
+
 
 Route::get('/', [ThuocController::class, 'getTrangChu']);
 //Page 
@@ -122,5 +124,13 @@ Route::prefix('dashboard')->name('admin.')->group(function () {
     Route::resource('thuoc', AdminThuocController::class);
     Route::patch('thuoc/{id}/restore', [AdminThuocController::class, 'restore'])->name('thuoc.restore');
     Route::delete('thuoc/{id}/force-delete', [AdminThuocController::class, 'forceDelete'])->name('thuoc.forceDelete');
+
+    // Quản lý đơn hàng
+  Route::prefix('donhang')->name('donhang.')->group(function () {
+        Route::get('/', [DonHangController::class, 'index'])->name('index');
+    });
+
+
 });
+
 
