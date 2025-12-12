@@ -51,6 +51,8 @@ Route::get('/dashboard', function () {
 
 Route::post('/pay', [GioHangController::class, 'pay'])->name('cart.pay');
 
+Route::get('/ajax/product/{maThuoc}', [ThuocController::class, 'ajaxGetProduct']);
+
 
 
 

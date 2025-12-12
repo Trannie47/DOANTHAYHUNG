@@ -49,23 +49,25 @@
                 $firstImage = is_array($item->HinhAnh) ? ($item->HinhAnh[0] ?? 'logo.png') : 'logo.png';
                 @endphp
 
-                <a class="product-item" href="{{ url('/thuoc/' .$item->maThuoc ) }}">
-                    @if ($item->getThumbnailImage())
-                    <img src="{{ $item->getThumbnailImage() }}"
-                        alt="{{ $item->tenThuoc }}">
-                    @else
-                    <img src="{{ asset('asset/img/'.$firstImage) }}">
-                    @endif
+                <div class="product-item">
 
-                    <h3>{{ $item->tenThuoc }}</h3>
+                    {{-- CLICK VÀO ĐÂY → QUA TRANG CHI TIẾT --}}
+                    <a class="product-link" href="{{ url('/thuoc/' .$item->maThuoc ) }}">
+                        <img src="{{ $item->getThumbnailImage() ?? asset('asset/img/'.$firstImage) }}" alt="{{ $item->tenThuoc }}">
+                        <h3>{{ $item->tenThuoc }}</h3>
+                        <p class="old-price">{{ number_format($item->GiaTien) }} đ</p>
+                        <p class="price">{{ number_format($item->giaKhuyenMai) }} đ/{{ $item->DVTinh }}</p>
+                    </a>
 
-                    <p class="old-price">{{ number_format($item->GiaTien) }} đ</p>
+                    {{-- CLICK VÀO ĐÂY → KHÔNG QUA TRANG → MỞ POPUP --}}
+                    <button type="button"
+                        class="btn-item"
+                        data-id="{{ $item->maThuoc }}">
+                        Chọn sản phẩm
+                    </button>
 
-                    <p class="price">{{ number_format($item->giaKhuyenMai) }} đ/{{ $item->DVTinh }}</p>
+                </div>
 
-                    <button class="btn-item">Chọn sản phẩm</button>
-
-                </a>
                 @endforeach
 
             </div>
@@ -103,7 +105,11 @@
                     <p class="price">{{ number_format($item->GiaTien) }} đ/{{ $item->DVTinh }}</p>
                     @endif
 
-                    <button class="btn-item">Chọn sản phẩm</button>
+                    <button type="button"
+                        class="btn-item"
+                        data-id="{{ $item->maThuoc }}">
+                        Chọn sản phẩm
+                    </button>
                 </a>
 
                 @endforeach

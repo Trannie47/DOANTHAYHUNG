@@ -21,11 +21,13 @@
         $header->prepare();
         $footer = new \App\View\Components\Footer();
         $footer->prepare();
+        $footer = new \App\View\Components\ProductModal();
+        $footer->prepare();
     @endphp
     
     {!! view()->shared('header_styles') ?? '' !!}
     {!! view()->shared('footer_styles') ?? '' !!}
-
+    {!! view()->shared('product_modal_styles') ?? '' !!}
     {{-- CSS riêng từng trang --}}
     @stack('styles')
 
@@ -73,8 +75,11 @@
     {{-- Nội dung từng trang --}}
     @yield('content')
 
+    {{-- Product Modal component --}}
+    <x-product-modal />
+
     {{-- Footer component --}}
-    {!! $footer->html() !!}
+    <x-footer />
 
     <!-- Splide JS -->
     <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.3/dist/js/splide.min.js"></script>
@@ -82,11 +87,11 @@
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <!-- Bootstrap 5 JS -->
     <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script> -->
-
+        
     {{-- Header & Footer JS --}}
     {!! view()->shared('header_scripts') ?? '' !!}
     {!! view()->shared('footer_scripts') ?? '' !!}
-
+    {!! view()->shared('product_modal_scripts') ?? '' !!}
     {{-- JS riêng từng trang --}}
     @stack('scripts')
 

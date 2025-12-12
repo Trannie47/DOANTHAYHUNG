@@ -66,4 +66,20 @@ class ThuocController extends Controller
 
         ));
     }
+
+    public function ajaxGetProduct($maThuoc)
+    {
+        $thuoc = Thuoc::where('maThuoc', $maThuoc)
+            ->where('isDelete', false)
+            ->firstOrFail();
+
+        return response()->json([
+            'tenThuoc' => $thuoc->tenThuoc,
+            'GiaTien' => $thuoc->GiaTien,
+            'DVTinh' => $thuoc->DVTinh,
+            'HinhAnh' => $thuoc->HinhAnh,
+            'maThuoc' => $thuoc->maThuoc,
+            'giaKhuyenMai' => $thuoc->giaKhuyenMai,
+        ]);
+    }
 }

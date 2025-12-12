@@ -32,7 +32,7 @@
                     <!-- Sản phẩm -->
                     <div class="cart__col cart__product">
                         <div class="cart__item">
-                            <img src="/asset/img/{{ $item['hinhAnh'] }}" alt="{{ $item['tenThuoc'] }}" width="100px">
+                            <img src="{{ asset($item['hinhAnh']) }}" alt="{{ $item['tenThuoc'] }}" width="100px">
                             <div class="cart__name">{{ $item['tenThuoc'] }}</div>
                         </div>
                     </div>
