@@ -159,7 +159,7 @@
                 <div class="quantity-button plus">+</div>
             </div>
         </div>
-
+1
         <div class="buyer-container">
             <button class="buy-now-button" type="submit">Mua ngay</button>
             <button class="add-to-cart-button" type="submit">Thêm vào giỏ</button>
