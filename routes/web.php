@@ -129,7 +129,18 @@ Route::prefix('dashboard')->name('admin.')->group(function () {
   Route::prefix('donhang')->name('donhang.')->group(function () {
         Route::get('/', [DonHangController::class, 'index'])->name('index');
     });
+Route::prefix('donhang')->name('donhang.')->group(function () {
 
+    // Trang danh sách tất cả đơn (lọc theo trạng thái)
+    Route::get('/', [DonHangController::class, 'index'])->name('index');
+
+    // Lịch sử đơn thuốc (đơn đã duyệt hoặc đã giao)
+    Route::get('/lich-su', [DonHangController::class, 'lichSu'])->name('lichsu');
+
+    // Xem chi tiết 1 đơn hàng
+    Route::get('/{id}', [DonHangController::class, 'show'])->name('show');
+
+});
 
 });
 
