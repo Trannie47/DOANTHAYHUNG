@@ -32,79 +32,88 @@
         </div>
     </div>
 
-<!-- Sản phẩm -->
-<section class="products">
+    <!-- Sản phẩm -->
+    <section class="products">
 
-    <!-- SẢN PHẨM KHUYẾN MÃI -->
-    <h2>Sản phẩm Khuyến Mãi</h2>
+        <!-- SẢN PHẨM KHUYẾN MÃI -->
+        <h2>Sản phẩm Khuyến Mãi</h2>
 
-<div class="km-wrapper">
+        <div class="km-wrapper">
 
-    <button class="km-arrow km-left">&lt;</button>
+            <button class="km-arrow km-left">&lt;</button>
 
-    <div class="product-list" id="kmList">
+            <div class="product-list" id="kmList">
 
-        @foreach ($thuocKhuyenmai as $item)
-        @php
-            $firstImage = is_array($item->HinhAnh) ? ($item->HinhAnh[0] ?? 'logo.png') : 'logo.png';
-        @endphp
+                @foreach ($thuocKhuyenmai as $item)
+                @php
+                $firstImage = is_array($item->HinhAnh) ? ($item->HinhAnh[0] ?? 'logo.png') : 'logo.png';
+                @endphp
 
-        <a class="product-item" href="{{ url('/thuoc/' .$item->maThuoc ) }}">
+                <a class="product-item" href="{{ url('/thuoc/' .$item->maThuoc ) }}">
+                    @if ($item->getThumbnailImage())
+                    <img src="{{ $item->getThumbnailImage() }}"
+                        alt="{{ $item->tenThuoc }}">
+                    @else
+                    <img src="{{ asset('asset/img/'.$firstImage) }}">
+                    @endif
 
-            <img src="{{ asset('asset/img/' . $firstImage) }}">
+                    <h3>{{ $item->tenThuoc }}</h3>
 
-            <h3>{{ $item->tenThuoc }}</h3>
+                    <p class="old-price">{{ number_format($item->GiaTien) }} đ</p>
 
-            <p class="old-price">{{ number_format($item->GiaTien) }} đ</p>
+                    <p class="price">{{ number_format($item->giaKhuyenMai) }} đ/{{ $item->DVTinh }}</p>
 
-            <p class="price">{{ number_format($item->giaKhuyenMai) }} đ/{{ $item->DVTinh }}</p>
+                    <button class="btn-item">Chọn sản phẩm</button>
 
-            <button class="btn-item">Chọn sản phẩm</button>
+                </a>
+                @endforeach
 
-        </a>
-        @endforeach
+            </div>
 
-    </div>
+            <button class="km-arrow km-right">&gt;</button>
 
-    <button class="km-arrow km-right">&gt;</button>
+        </div>
+        <h2>Sản phẩm mới</h2>
 
-</div>
-<h2>Sản phẩm mới</h2>
+        <div class="km-wrapper">
 
-<div class="km-wrapper">
+            <!-- Mũi tên trái -->
+            <button class="km-arrow new-left">&lt;</button>
 
-    <!-- Mũi tên trái -->
-     <button class="km-arrow new-left">&lt;</button>
+            <div class="product-list" id="newList">
 
-    <div class="product-list" id="newList">
+                @foreach ($thuocmoi as $item)
+                @php
+                $firstImage = is_array($item->HinhAnh) ? ($item->HinhAnh[0] ?? 'logo.png') : 'logo.png';
+                @endphp
 
-        @foreach ($thuocmoi as $item)
-        @php
-            $firstImage = is_array($item->HinhAnh) ? ($item->HinhAnh[0] ?? 'logo.png') : 'logo.png';
-        @endphp
+                <a class="product-item" href="{{ url('/thuoc/'.$item->maThuoc) }}">
+                    @if ($item->getThumbnailImage())
+                    <img src="{{ $item->getThumbnailImage() }}"
+                        alt="{{ $item->tenThuoc }}">
+                    @else
+                    <img src="{{ asset('asset/img/'.$firstImage) }}">
+                    @endif
+                    <h3>{{ $item->tenThuoc }}</h3>
 
-        <a class="product-item" href="{{ url('/thuoc/'.$item->maThuoc) }}">
-            <img src="{{ asset('asset/img/'.$firstImage) }}">
-            <h3>{{ $item->tenThuoc }}</h3>
+                    @if ($item->giaKhuyenMai)
+                    <p class="old-price">{{ number_format($item->GiaTien) }} đ</p>
+                    <p class="price">{{ number_format($item->giaKhuyenMai) }} đ/{{ $item->DVTinh }}</p>
+                    @else
+                    <p class="price">{{ number_format($item->GiaTien) }} đ/{{ $item->DVTinh }}</p>
+                    @endif
 
-            @if ($item->giaKhuyenMai)
-                <p class="old-price">{{ number_format($item->GiaTien) }} đ</p>
-                <p class="price">{{ number_format($item->giaKhuyenMai) }} đ/{{ $item->DVTinh }}</p>
-            @else
-                <p class="price">{{ number_format($item->GiaTien) }} đ/{{ $item->DVTinh }}</p>
-            @endif
+                    <button class="btn-item">Chọn sản phẩm</button>
+                </a>
 
-            <button class="btn-item">Chọn sản phẩm</button>
-        </a>
+                @endforeach
 
-        @endforeach
+            </div>
 
-    </div>
+            <!-- Mũi tên phải -->
+            <button class="km-arrow new-right">&gt;</button>
 
-    <!-- Mũi tên phải -->
-    <button class="km-arrow new-right">&gt;</button>
-
-</div>
+        </div>
 
 
 </div>
@@ -112,28 +121,28 @@
 
 </section>
 
-    <!-- Tin tức -->
-    <section class="news">
-        <h2>Góc sức khỏe</h2>
-        <div class="news-wrapper">
-            <button class="prev-btn"><i class="fa-solid fa-chevron-left"></i></button>
+<!-- Tin tức -->
+<section class="news">
+    <h2>Góc sức khỏe</h2>
+    <div class="news-wrapper">
+        <button class="prev-btn"><i class="fa-solid fa-chevron-left"></i></button>
 
-            <div class="news-list">
-                <a class="news-item news-item-large" href="#">
-                    <img src="{{ asset('asset/img/covid.png') }}" alt="Covid">
-                    <div class="news-content">
-                        <span class="news-category">Tin dịch bệnh</span>
-                        <h3>Tình trạng covid 19 hiện nay và cách phòng tránh</h3>
-                        <p>So với cùng kỳ năm ngoái, tổng số ca mắc Covid-19 được ghi nhận tại TPHCM năm 2023 giảm đến 83%...</p>
-                    </div>
-                </a>
+        <div class="news-list">
+            <a class="news-item news-item-large" href="#">
+                <img src="{{ asset('asset/img/covid.png') }}" alt="Covid">
+                <div class="news-content">
+                    <span class="news-category">Tin dịch bệnh</span>
+                    <h3>Tình trạng covid 19 hiện nay và cách phòng tránh</h3>
+                    <p>So với cùng kỳ năm ngoái, tổng số ca mắc Covid-19 được ghi nhận tại TPHCM năm 2023 giảm đến 83%...</p>
+                </div>
+            </a>
 
-                
-            </div>
 
-            <button class="next-btn"><i class="fa-solid fa-chevron-right"></i></button>
         </div>
-    </section>
+
+        <button class="next-btn"><i class="fa-solid fa-chevron-right"></i></button>
+    </div>
+</section>
 </div>
 
 <!-- Chatbox -->

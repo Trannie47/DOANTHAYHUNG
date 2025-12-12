@@ -15,7 +15,7 @@
                 <ul class="splide__list">
                     @foreach($thuoc->HinhAnh as $hinh)
                         <li class="splide__slide">
-                            <img src="{{ asset('asset/img/' . $hinh) }}" 
+                            <img src="{{ $thuoc->getThumbnailImage() }}" 
                                 alt="{{ $thuoc->tenThuoc }} - ảnh {{ $loop->iteration }}" 
                                 loading="lazy">
                         </li>
@@ -29,7 +29,7 @@
                 <div class="splide__track">
                 <ul class="splide__list">
                     @foreach($thuoc->HinhAnh as $hinh)
-                        <li class="splide__slide"><img src="{{ asset('asset/img/' . $hinh) }}" alt="Thumb 1" /></li>
+                        <li class="splide__slide"><img src="{{ $thuoc->getThumbnailImage() }}" alt="Thumb 1" /></li>
                     @endforeach
                 </ul>
                 </div>
