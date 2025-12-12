@@ -68,9 +68,10 @@
                                 Trạng thái đơn hàng
                             </a>
 
-                            <a class="donthuoc-item" href="{{ route('admin.donhang.index') }}">
+                            <a class="donthuoc-item" href="{{ route('admin.donhang.lichsu') }}">
                                 Lịch sử đơn thuốc
                             </a>
+
 
 
                         </div>
@@ -123,21 +124,21 @@
             <!-- Nội dung chính -->
             <div class="container-fluid py-4">
                 @yield('content')
-               
+
             </div>
 
-           
+
         </div>
     </div>
 
-    <!-- Offcanvas cho mobile -->
+
     <div class="offcanvas offcanvas-start bg-primary text-white" tabindex="-1" id="offcanvasSidebar" style="width:280px;">
         <div class="offcanvas-header">
             <h5 class="offcanvas-title">Admin Thuốc</h5>
             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
         </div>
         <div class="offcanvas-body p-0">
-           
+
         </div>
     </div>
 

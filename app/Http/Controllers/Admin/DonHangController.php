@@ -39,4 +39,36 @@ class DonHangController extends Controller
 
         return view('admin.donhang.index', compact('data', 'stats'));
     }
+
+    public function pageLichSu(Request $request)
+    {
+        $query = Donhang::where('trangthai', 1); // chỉ lấy đơn đã duyệt
+
+        // Tìm kiếm theo mã đơn
+        if ($request->filled('keyword')) {
+            $query->where('maDonHang', 'LIKE', '%' . $request->keyword . '%');
+        }
+
+        // Lọc theo số điện thoại người mua
+        if ($request->filled('sdt')) {
+            $query->where('SdtNguoiDat', 'LIKE', '%' . $request->sdt . '%');
+        }
+
+        // Lọc thời gian
+        if ($request->filled('from_date')) {
+            $query->whereDate('ngaydat', '>=', $request->from_date);
+        }
+
+        if ($request->filled('to_date')) {
+            $query->whereDate('ngaydat', '<=', $request->to_date);
+        }
+
+        // Sắp xếp theo mới nhất / cũ nhất
+        $sort = $request->get('sort', 'desc');
+        $query->orderBy('ngaydat', $sort);
+
+        $data = $query->paginate(10);
+
+        return view('admin.donhang.lichsu', compact('data'));
+    }
 }
