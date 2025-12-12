@@ -13,10 +13,10 @@ class ThuocController extends Controller
     {
         // Lấy thuốc + join loại thuốc để lấy tên loại
         $thuoc = Thuoc::join('Loaithuoc', 'thuoc.maLoai', '=', 'Loaithuoc.maLoai')
-              ->select('thuoc.*', 'Loaithuoc.tenLoai') // thêm trường tên loại
-              ->where('thuoc.isDelete', false) // chỉ lấy thuốc chưa bị xóa
-              ->where('thuoc.maThuoc', $id)
-              ->firstOrFail(); // không thấy thì báo lỗi 404
+            ->select('thuoc.*', 'Loaithuoc.tenLoai') // thêm trường tên loại
+            ->where('thuoc.isDelete', false) // chỉ lấy thuốc chưa bị xóa
+            ->where('thuoc.maThuoc', $id)
+            ->firstOrFail(); // không thấy thì báo lỗi 404
 
         if (!$thuoc) {
             abort(404, 'Thuốc không tồn tại');
@@ -53,19 +53,17 @@ class ThuocController extends Controller
 
         // Sản phẩm mới: tạo trong 30 ngày gần đây
         $thuocmoi = Thuoc::where('CreateAt', '>=', Carbon::now()->subDays(30))
+            ->where('thuoc.isDelete', false)
             ->orderBy('CreateAt', 'desc')
             ->limit(20)
             ->get();
-           
-    
 
 
-    // Trả về view với TẤT CẢ dữ liệu
-    return view('trangchu.index', compact(
-        'thuocKhuyenmai',
-        'thuocmoi'
-        
-    ));
-}
+        // Trả về view với TẤT CẢ dữ liệu
+        return view('trangchu.index', compact(
+            'thuocKhuyenmai',
+            'thuocmoi'
 
+        ));
+    }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Loaithuoc;
+use App\Models\Thuoc;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -15,6 +16,7 @@ class LoaiThuocController extends Controller
     public function index(Request $request)
     {
         $loaithuocs = Loaithuoc::orderBy('maLoai', 'desc')
+            ->where('isDelete', false)
             ->paginate(15);
 
         return view('admin.loaithuoc.index', compact('loaithuocs'));
@@ -49,7 +51,7 @@ class LoaiThuocController extends Controller
      */
     public function edit($id)
     {
-        $loaithuoc = Loaithuoc::findOrFail($id);
+        $loaithuoc = Loaithuoc::findOrFail($id)->where('isDelete', false)->first();
 
         return view('admin.loaithuoc.edit', compact('loaithuoc'));
     }
@@ -59,7 +61,7 @@ class LoaiThuocController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $loaithuoc = Loaithuoc::findOrFail($id);
+        $loaithuoc = Loaithuoc::findOrFail($id)->where('isDelete', false)->first();
 
         $validated = $request->validate([
             'TenLoai' => 'required|string|max:255|unique:loaithuoc,TenLoai,' . $id . ',maLoai',
@@ -77,10 +79,14 @@ class LoaiThuocController extends Controller
      */
     public function destroy($id)
     {
-        $loaithuoc = Loaithuoc::findOrFail($id);
-
+        $loaithuoc = Loaithuoc::findOrFail($id)->where('isDelete', false)->first();
+        $thuocs = Thuoc::where('maLoai', $id)->where('isDelete', false)->count();
+        if ($thuocs > 0) {
+            return redirect()->route('admin.loaithuoc.index')
+                ->with('error', 'Không thể xóa loại thuốc này vì còn thuốc thuộc loại này.');
+        }    
         try {
-            $loaithuoc->delete();
+            $loaithuoc->update(['isDelete' => true]);
 
             return redirect()->route('admin.loaithuoc.index')
                 ->with('success', 'Xóa loại thuốc thành công!');

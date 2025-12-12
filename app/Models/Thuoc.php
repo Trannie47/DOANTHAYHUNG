@@ -54,6 +54,7 @@ class Thuoc extends Model
 	];
 
 	protected $fillable = [
+		'maThuoc',
 		'tenThuoc',
 		'QuiCach',
 		'GiaTien',
@@ -68,7 +69,7 @@ class Thuoc extends Model
 		'chiDinhCuaBacSi',
 		'giaKhuyenMai',
 		'CreateAt',
-		
+		'isDelete'
 	];
 
 	public function loaithuoc()
