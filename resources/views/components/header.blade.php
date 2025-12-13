@@ -62,7 +62,7 @@
             <ul class="cart-items">
                 @forelse ($cart as $id => $item)
                     <li id="sp-{{ $id }}">
-                        <img src="{{ asset('asset/img/' . $item['hinhAnh']) }}" alt="{{ $item['tenThuoc'] }}">
+                        <img src="{{ asset($item['hinhAnh']) }}" alt="{{ $item['tenThuoc'] }}">
                         <div class="item-info">
                             <p>{{ $item['tenThuoc'] }}</p>
                             <div class="item-info-price">

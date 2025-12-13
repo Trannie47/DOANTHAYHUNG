@@ -95,6 +95,12 @@ body {
   flex-direction: column;
   gap: 1rem;
   background-color: white;
+  min-width: 15rem;
+}
+.product-link {
+  text-decoration: none;
+  color: inherit;
+
 }
 
 .product-item:hover {
@@ -331,6 +337,7 @@ body {
 
 /* Mũi tên */
 .km-arrow {
+    display: none;
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
