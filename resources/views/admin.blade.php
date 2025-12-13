@@ -58,13 +58,16 @@
                     </div>
 
                     <!-- Quản lý đơn thuốc -->
+                    <!-- Quản lý đơn thuốc -->
                     <button class="btn text-white text-start w-100 mb-1" data-bs-toggle="collapse" data-bs-target="#collapseDonThuoc">
                         <i class="fas fa-file-medical me-2"></i>Quản lý đơn thuốc <i class="fas fa-chevron-down float-end"></i>
                     </button>
+
                     <div class="collapse" id="collapseDonThuoc">
                         <div class="donthuoc-menu ms-4 me-3">
 
-                            <a class="donthuoc-item" href="{{ route('admin.donhang.index', ['status' => 0]) }}">
+                            <!-- Trang chung -->
+                            <a class="donthuoc-item" href="{{ route('admin.donhang.index') }}">
                                 Trạng thái đơn hàng
                             </a>
 
@@ -72,10 +75,9 @@
                                 Lịch sử đơn thuốc
                             </a>
 
-
-
                         </div>
                     </div>
+
 
 
                     <hr class="bg-white opacity-25">

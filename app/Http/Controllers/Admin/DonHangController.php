@@ -63,12 +63,30 @@ class DonHangController extends Controller
             $query->whereDate('ngaydat', '<=', $request->to_date);
         }
 
-        // Sắp xếp theo mới nhất / cũ nhất
+        // Sắp xếp mới nhất / cũ nhất
         $sort = $request->get('sort', 'desc');
         $query->orderBy('ngaydat', $sort);
 
+        // Phân trang
         $data = $query->paginate(10);
 
         return view('admin.donhang.lichsu', compact('data'));
+    }
+
+
+
+    public function duyet($id)
+    {
+        $don = Donhang::findOrFail($id);
+        $don->trangthai = 1; // duyệt đơn
+        $don->save();
+
+        return back()->with('success', 'Duyệt đơn hàng thành công!');
+    }
+    public function show($id)
+    {
+        $don = Donhang::with('chitietdonhangs.thuoc')->findOrFail($id);
+
+        return view('admin.donhang.show', compact('don'));
     }
 }

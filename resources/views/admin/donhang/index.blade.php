@@ -78,24 +78,41 @@
         </thead>
 
         <tbody>
-            @foreach ($data as $item)
-                <tr>
-                    <td>{{ $item->maDonHang }}</td>
-                    <td>{{ $item->ngaydat }}</td>
-                    <td>
-                        @php 
-                            $badge = ['warning','success','danger'][$item->trangthai];
-                        @endphp
-                        <span class="badge bg-{{ $badge }}">
-                            {{ $item->trang_thai_text }}
-                        </span>
-                    </td>
-                    <td>
-                        <a class="btn btn-primary btn-sm">Xem</a>
-                    </td>
-                </tr>
-            @endforeach
-        </tbody>
+    @foreach ($data as $item)
+        <tr>
+            <td>{{ $item->maDonHang }}</td>
+            <td>{{ $item->ngaydat }}</td>
+
+            <td>
+                @php 
+                    $badge = ['warning','success','danger'][$item->trangthai];
+                @endphp
+                <span class="badge bg-{{ $badge }}">
+                    {{ $item->trang_thai_text }}
+                </span>
+            </td>
+
+            <td>
+                {{-- Nút duyệt đơn (chỉ hiện khi trạng thái = 0) --}}
+                @if ($item->trangthai == 0)
+                    <form action="{{ route('admin.donhang.duyet', $item->maDonHang) }}" 
+                          method="POST" style="display:inline;">
+                        @csrf
+                        @method('PATCH')
+                        <button class="btn btn-success btn-sm">Duyệt</button>
+                    </form>
+                @endif
+
+                {{-- Nút xem chi tiết --}}
+                <a href="{{ route('admin.donhang.show', $item->maDonHang) }}" 
+                   class="btn btn-primary btn-sm">
+                    Xem
+                </a>
+            </td>
+        </tr>
+    @endforeach
+</tbody>
+
     </table>
 
 </div>

@@ -126,13 +126,20 @@ Route::prefix('dashboard')->name('admin.')->group(function () {
     Route::delete('thuoc/{id}/force-delete', [AdminThuocController::class, 'forceDelete'])->name('thuoc.forceDelete');
 
     // Quản lý đơn hàng
-  Route::prefix('donhang')->name('donhang.')->group(function () {
+
+    // QUẢN LÝ ĐƠN HÀNG
+    Route::prefix('donhang')->name('donhang.')->group(function () {
+
+        // Trang chính với bộ lọc trạng thái
         Route::get('/', [DonHangController::class, 'index'])->name('index');
+
+        // Lịch sử đơn hàng
+        Route::get('/lich-su', [DonHangController::class, 'pageLichSu'])->name('lichsu');
+
+        // Duyệt đơn
+        Route::patch('/{id}/duyet', [DonHangController::class, 'duyet'])->name('duyet');
+
+        // Xem chi tiết 1 đơn hàng
+        Route::get('/{id}', [DonHangController::class, 'show'])->name('show');
     });
-      Route::get('/donhang/lich-su', [DonHangController::class, 'pageLichSu'])
-     ->name('donhang.lichsu');
-
-
 });
-
-
