@@ -53,6 +53,7 @@ class ThuocController extends Controller
             'CachSuDung' => 'nullable|string',
             'giaKhuyenMai' => 'nullable|numeric|min:0',
             'chiDinhCuaBacSi' => 'nullable|boolean',
+            'SoLuongTonKho' => 'nullable|numeric|min:0',
             'HinhAnh' => 'nullable|array',
             'HinhAnh.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
@@ -73,7 +74,7 @@ class ThuocController extends Controller
         $validated['CreateAt'] = Carbon::now();
         $validated['chiDinhCuaBacSi'] = $validated['chiDinhCuaBacSi'] ?? false;
         $validated['giaKhuyenMai'] = $validated['giaKhuyenMai'] ?? 0;
-
+        $validated['SoLuongTonKho'] = $validated['SoLuongTonKho'] ?? 0;
         Thuoc::create($validated);
 
         return redirect()->route('admin.thuoc.index')->with('success', 'Thêm thuốc thành công!');
@@ -105,6 +106,7 @@ class ThuocController extends Controller
             'CachSuDung' => 'nullable|string',
             'giaKhuyenMai' => 'nullable|numeric|min:0',
             'chiDinhCuaBacSi' => 'nullable|boolean',
+            'SoLuongTonKho' => 'nullable|numeric|min:0',
             'HinhAnh' => 'nullable|array',
             'HinhAnh.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
             'delete_images' => 'nullable|array',

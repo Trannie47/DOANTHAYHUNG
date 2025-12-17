@@ -16,25 +16,33 @@
         <thead>
             <tr>
                 <th>Thuốc</th>
-                <th>Giá</th>
+                <th>Đơn giá</th>
                 <th>Số lượng</th>
-                <th>Tổng</th>
+                <th>Thành tiền</th>
             </tr>
         </thead>
 
         <tbody>
+            @php $tongTien = 0; @endphp
+
             @foreach($don->chitietdonhangs as $ct)
-            <tr>
-                <td>{{ $ct->thuoc->TenThuoc }}</td>
-                <td>{{ number_format($ct->thuoc->GiaTien) }}</td>
-                <td>{{ $ct->SoLuong }}</td>
-                <td>{{ number_format($ct->SoLuong * $ct->thuoc->GiaTien) }}</td>
-            </tr>
+                @php
+                    $thanhTien = $ct->SoLuong * $ct->SoTien;
+                    $tongTien += $thanhTien;
+                @endphp
+                <tr>
+                    <td>{{ $ct->thuoc->tenThuoc }}</td>
+                    <td>{{ number_format($ct->SoTien) }} đ</td>
+                    <td>{{ $ct->SoLuong }}</td>
+                    <td>{{ number_format($thanhTien) }} đ</td>
+                </tr>
             @endforeach
         </tbody>
     </table>
 
-    <h4 class="text-end">Tổng tiền: <b>{{ number_format($don->tongTien) }} VND</b></h4>
+    <h4 class="text-end">
+        Tổng tiền: <b>{{ number_format($tongTien) }} đ</b>
+    </h4>
 
 </div>
 @endsection

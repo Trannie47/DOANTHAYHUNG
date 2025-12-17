@@ -27,7 +27,9 @@ class DonHangController extends Controller
             $query->whereDate('ngaydat', '<=', $request->to_date);
         }
 
-        $data = $query->orderBy('ngaydat', 'desc')->get();
+        $data = $query
+                ->orderBy('TrangThai', 'asc')
+                ->orderBy('ngaydat', 'desc')->get();
 
         // Thống kê
         $stats = [

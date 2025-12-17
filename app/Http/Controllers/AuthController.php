@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Donhang;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Khachhang;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Loaithuoc;
+use App\Models\Thuoc;
+use Illuminate\Support\Facades\DB;
 
 class AuthController extends Controller
 {
@@ -77,16 +81,15 @@ class AuthController extends Controller
             // Kiểm tra quyền admin hay user
             if ($khachhang->isAdmin == 0) {
                 return redirect('/trangchu')->with('success', 'Đăng nhập thành công!');
-            } 
-            else if ($khachhang->isAdmin == 1) {
+            } else if ($khachhang->isAdmin == 1) {
                 return redirect('/dashboard')->with('success', 'Đăng nhập thành công!');
-            } 
+            }
         }
 
         // Sai thông tin => báo lỗi
-        return back()->withErrors([
-            'phone' => 'Số điện thoại hoặc mật khẩu không đúng',
-        ])->onlyInput('phone'); // giữ lại giá trị phone
+        return back()
+            ->with('error', 'Số điện thoại hoặc mật khẩu không đúng')
+            ->onlyInput('phone');
     }
 
 
@@ -104,4 +107,59 @@ class AuthController extends Controller
         return redirect('/dangnhap')->with('success', 'Bạn đã đăng xuất thành công!');
     }
 
+    //Dăng nhâp admin
+    public function showAdminLogin()
+    {
+        // Cards
+        $SLLoaiThuoc = Loaithuoc::where('isDelete', false)->count();
+
+        $SLThuoc = Thuoc::where('isDelete', false)->count();
+
+        $SLDonHangTrongNgay = Donhang::whereDate('NgayDat', today())->count();
+
+        $SLThuocSapHetHang = Thuoc::where('isDelete', false)
+            ->where('SoLuongTonKho', '<=', 50)
+            ->count();
+
+        // Chart: đơn thuốc theo tháng (năm hiện tại)
+        $donThuocTheoThang = Thuoc::where('thuoc.isDelete', false)
+            ->join(
+                'chitietdonhang',
+                'thuoc.maThuoc',
+                '=',
+                'chitietdonhang.maThuoc'
+            )
+            ->join(
+                'donhang',
+                'chitietdonhang.maDonHang',
+                '=',
+                'donhang.maDonHang'
+            )
+            ->select(
+                'thuoc.tenThuoc',
+                DB::raw('SUM(chitietdonhang.SoLuong) as tongSoLuong')
+            )
+            ->whereMonth('donhang.ngaydat', now()->month)
+            ->whereYear('donhang.ngaydat', now()->year)
+            ->groupBy('thuoc.tenThuoc')
+            ->orderByDesc('tongSoLuong')
+            ->limit(5)
+            ->get();
+
+        // Table: thuốc sắp hết
+        $thuocSapHet = Thuoc::where('isDelete', false)
+            ->where('SoLuongTonKho', '<=', 10)
+            ->orderBy('SoLuongTonKho')
+            ->limit(10)
+            ->get();
+
+        return view('dashboard.index', compact(
+            'SLLoaiThuoc',
+            'SLThuoc',
+            'SLDonHangTrongNgay',
+            'SLThuocSapHetHang',
+            'donThuocTheoThang',
+            'thuocSapHet'
+        ));
+    }
 }

@@ -65,8 +65,8 @@
                             <th width="80">Ảnh</th>
                             <th width="200">Tên Thuốc</th>
                             <th width="100">Loại</th>
-                            <th width="80">Quy Cách</th>
                             <th width="100">Giá Tiền</th>
+                            <th width="80">Giá GM</th>
                             <th width="80">ĐVT</th>
                             <th width="150" class="text-center">Hành Động</th>
                         </tr>
@@ -98,10 +98,10 @@
                                         <span class="badge bg-danger">N/A</span>
                                     @endif
                                 </td>
-                                <td>{{ $thuoc->QuiCach }}</td>
                                 <td class="fw-bold text-danger">
                                     {{ formatPrice($thuoc->GiaTien) }}
                                 </td>
+                                <td>{{ formatPrice($thuoc->giaKhuyenMai) }}</td>
                                 <td>{{ $thuoc->DVTinh }}</td>
                                 <td class="text-center">
                                     <a href="{{ route('admin.thuoc.edit', $thuoc->maThuoc) }}" 

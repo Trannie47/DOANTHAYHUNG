@@ -45,9 +45,7 @@ Route::post('/dangnhap', [AuthController::class, 'login'])->name('login.submit')
 
 Route::post('/dangxuat', [AuthController::class, 'logout'])->name('logout');
 
-Route::get('/dashboard', function () {
-    return view('Dashboard.index');
-});
+Route::get('/dashboard', [AuthController::class, 'showAdminLogin'])->name('dashboard.index');
 
 Route::post('/pay', [GioHangController::class, 'pay'])->name('cart.pay');
 

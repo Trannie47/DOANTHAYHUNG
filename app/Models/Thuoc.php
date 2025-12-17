@@ -28,6 +28,7 @@ use Illuminate\Support\Str;
  * @property int $maLoai
  * @property bool $chiDinhCuaBacSi
  * @property float $giaKhuyenMai
+ * @property float $SoLuongTonKho
  * @property Carbon $CreateAt
  * @property bool $isDelete
  * 
@@ -68,6 +69,7 @@ class Thuoc extends Model
 		'maLoai',
 		'chiDinhCuaBacSi',
 		'giaKhuyenMai',
+		'SoLuongTonKho',
 		'CreateAt',
 		'isDelete'
 	];

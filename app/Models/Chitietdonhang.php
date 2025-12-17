@@ -46,6 +46,10 @@ class Chitietdonhang extends Model
 
 	public function thuoc()
 	{
-		return $this->belongsTo(Thuoc::class, 'maThuoc');
+		return $this->belongsTo(
+			Thuoc::class,
+			'maThuoc',  
+			'maThuoc'   
+		);
 	}
 }
