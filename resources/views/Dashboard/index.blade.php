@@ -62,7 +62,7 @@
                             <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
                                 Thuốc sắp hết hàng
                             </div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $SLThuocSapHetHang }}</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $dsThuocSapHetHang->count() }}</div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-exclamation-triangle fa-2x text-gray-300"></i>
@@ -172,6 +172,50 @@
             </div>
         </div>
     </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">
+                        Danh sách thuốc sắp hết hàng
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered text-center">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Mã thuốc</th>
+                                    <th>Tên thuốc</th>
+                                    <th>Số lượng còn lại</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse($dsThuocSapHetHang as $index => $item)
+                                <tr>
+                                    <td>{{ $index + 1 }}</td>
+                                    <td>{{ $item->maThuoc }}</td>
+                                    <td>{{ $item->tenThuoc }}</td>
+                                    <td>
+                                        <span class="badge text-black ">
+                                            {{ $item->SoLuongTonKho }}
+                                        </span>
+                                    </td>
+                                </tr>
+                                @empty
+                                <tr>
+                                    <td colspan="3">Chưa có dữ liệu</td>
+                                </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
 </div>
 

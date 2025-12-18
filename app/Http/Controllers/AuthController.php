@@ -117,9 +117,7 @@ class AuthController extends Controller
 
         $SLDonHangTrongNgay = Donhang::whereDate('NgayDat', today())->count();
 
-        $SLThuocSapHetHang = Thuoc::where('isDelete', false)
-            ->where('SoLuongTonKho', '<=', 50)
-            ->count();
+
 
         // Chart: đơn thuốc theo tháng (năm hiện tại)
         $donThuocTheoThang = Thuoc::where('thuoc.isDelete', false)
@@ -198,16 +196,22 @@ class AuthController extends Controller
             $labelsLoaiThuoc[] = $item->tenLoaiThuoc;
             $dataLoaiThuoc[] = $item->soLuongThuoc;
         }
+
+        //Danh sách thuốc sắp hết hàng
+        $dsThuocSapHetHang = Thuoc::where('isDelete', false)
+            ->where('SoLuongTonKho', '<=', 50)
+            ->orderBy('SoLuongTonKho', 'asc')
+            ->get();    
         
         return view('dashboard.index', compact(
             'labels',
             'data',
             'labelsLoaiThuoc',
             'dataLoaiThuoc',
+            'dsThuocSapHetHang',
             'SLLoaiThuoc',
             'SLThuoc',
             'SLDonHangTrongNgay',
-            'SLThuocSapHetHang',
             'donThuocTheoThang',
             'thuocSapHet'
         ));
