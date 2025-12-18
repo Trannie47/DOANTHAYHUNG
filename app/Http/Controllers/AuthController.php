@@ -153,7 +153,57 @@ class AuthController extends Controller
             ->limit(10)
             ->get();
 
+        $year = now()->year;
+
+        // Lấy số đơn theo từng tháng trong năm
+        $ChartDonThuocTheoThang = Donhang::select(
+            DB::raw('MONTH(ngaydat) as thang'),
+            DB::raw('COUNT(*) as soDon')
+        )
+            ->whereYear('ngaydat', $year)
+            ->groupBy(DB::raw('MONTH(ngaydat)'))
+            ->orderBy(DB::raw('MONTH(ngaydat)'))
+            ->get();
+
+        // Tạo đủ 12 tháng (tháng không có đơn = 0)
+        $labels = [];
+        $data   = [];
+
+        for ($i = 1; $i <= 12; $i++) {
+            $labels[] = 'Tháng ' . $i;
+
+            $found = $ChartDonThuocTheoThang->firstWhere('thang', $i);
+            $data[] = $found ? $found->soDon : 0;
+        }
+
+        // Tỷ lệ thuốc theo loại (Phần trăm)
+        $TyleThuocTheoLoai = Loaithuoc::join(
+            'thuoc',
+            'loaithuoc.maLoai',
+            '=',
+            'thuoc.maLoai'
+        )
+            ->select(
+                'loaithuoc.TenLoai as tenLoaiThuoc',
+                DB::raw('COUNT(thuoc.maThuoc) as soLuongThuoc')
+            )
+            ->where('loaithuoc.isDelete', false)
+            ->where('thuoc.isDelete', false)
+            ->groupBy('loaithuoc.TenLoai')
+            ->get();
+        $labelsLoaiThuoc = [];
+        $dataLoaiThuoc = [];
+
+        foreach ($TyleThuocTheoLoai as $item) {
+            $labelsLoaiThuoc[] = $item->tenLoaiThuoc;
+            $dataLoaiThuoc[] = $item->soLuongThuoc;
+        }
+        
         return view('dashboard.index', compact(
+            'labels',
+            'data',
+            'labelsLoaiThuoc',
+            'dataLoaiThuoc',
             'SLLoaiThuoc',
             'SLThuoc',
             'SLDonHangTrongNgay',

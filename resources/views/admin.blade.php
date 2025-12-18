@@ -28,7 +28,7 @@
                 <hr class="bg-white opacity-25">
 
                 <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist">
-                    <a class="nav-link text-white active" href="#"><i class="fas fa-tachometer-alt me-2"></i>Bảng điều khiển</a>
+                    <a class="nav-link text-white active" href="{{ route('dashboard.index') }}"><i class="fas fa-tachometer-alt me-2"></i>Bảng điều khiển</a>
 
                     <hr class="bg-white opacity-25">
 

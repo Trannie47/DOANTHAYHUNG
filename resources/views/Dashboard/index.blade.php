@@ -182,33 +182,49 @@
 
 <script>
     // Chart đơn thuốc
+    const labels = @json($labels);
+    const dataValues = @json($data);
+
     new Chart(document.getElementById('chartDonThuoc'), {
         type: 'line',
         data: {
-            labels: ["T1", "T2", "T3", "T4", "T5", "T6"],
+            labels: labels,
             datasets: [{
-                label: "Đơn thuốc",
-                data: [40, 55, 48, 60, 72, 90],
+                label: 'Đơn thuốc năm {{ now()->year }}',
+                data: dataValues,
                 borderColor: '#4e73df',
+                backgroundColor: 'rgba(78, 115, 223, 0.15)',
                 borderWidth: 3,
-                fill: false
+                tension: 0.4,
+                fill: true,
+                pointRadius: 4,
+                pointBackgroundColor: '#4e73df'
             }]
         },
         options: {
             responsive: true,
-            maintainAspectRatio: false
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        precision: 0
+                    }
+                }
+            }
         }
-
     });
 
     // Chart loại thuốc
+    const labelsLoaiThuoc = @json($labelsLoaiThuoc);
+    const dataLoaiThuoc = @json($dataLoaiThuoc);
     new Chart(document.getElementById('chartLoaiThuoc'), {
         type: 'doughnut',
         data: {
-            labels: ["Thuốc cảm", "Kháng sinh", "Vitamin"],
+            labels: labelsLoaiThuoc,
             datasets: [{
-                data: [40, 30, 30],
-                backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc']
+                data: dataLoaiThuoc,
+               
             }]
         },
         options: {
