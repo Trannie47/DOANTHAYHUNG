@@ -82,8 +82,14 @@
                     <hr class="bg-white opacity-25">
 
                     <div class="text-white-50 small text-uppercase mb-2 ps-3">Tài khoản</div>
-                    <a class="nav-link text-white" href="#"><i class="fas fa-users-cog me-2"></i>Quản lý nhân viên</a>
-                    <a class="nav-link text-white" href="#"><i class="fas fa-sign-out-alt me-2"></i>Đăng xuất</a>
+                    <a class="nav-link text-white"
+                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                        <i class="fas fa-sign-out-alt me-2"></i> Đăng xuất
+                    </a>
+
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                        @csrf
+                    </form>
                 </div>
             </div>
         </div>
@@ -116,7 +122,18 @@
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
-                            <li><a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt me-2"></i>Đăng xuất</a></li>
+                            <li>
+                                <a class="dropdown-item"
+                                    href="#"
+                                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                    <i class="fas fa-sign-out-alt me-2"></i> Đăng xuất
+                                </a>
+
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                    @csrf
+                                </form>
+                            </li>
+
                         </ul>
                     </div>
                 </div>

@@ -142,4 +142,6 @@ Route::prefix('dashboard')->name('admin.')->group(function () {
         // Xem chi tiết 1 đơn hàng
         Route::get('/{id}', [DonHangController::class, 'show'])->name('show');
     });
+
+    Route::post('/dangxuatadmin', [AuthController::class, 'adminLogout'])->name('logoutadmin');
 });

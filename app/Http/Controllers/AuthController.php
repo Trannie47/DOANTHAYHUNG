@@ -216,4 +216,18 @@ class AuthController extends Controller
             'thuocSapHet'
         ));
     }
+
+    // Đăng xuất Admin
+    public function adminLogout(Request $request)
+    {
+        // Logout guard 'khachhang'
+        Auth::guard('khachhang')->logout();
+
+        // Xoá toàn bộ session tránh lỗi 419
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        // Trả về trang đăng nhập
+        return redirect('/dangnhap')->with('success', 'Bạn đã đăng xuất thành công!');
+    }
 }
