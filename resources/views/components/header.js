@@ -1,12 +1,13 @@
 document.addEventListener("DOMContentLoaded", function () {
-    // Chạy tất cả các chức năng của Header
     initHeaderFeatures();
     addRemoveItemEvent();
     initTypingEffect("#search-input", ["Tìm thuốc ...", "Tin tức ...", "Dinh Dưỡng..."]);
+    initSearchDropdown();
 });
 
+/* ================= HEADER CORE ================= */
+
 function initHeaderFeatures() {
-    // Delay 0.5s để đảm bảo DOM render xong
     setTimeout(() => {
         const menuIcon = document.querySelector(".menu-icon");
         const navMenu = document.querySelector(".menu-bar");
@@ -20,125 +21,177 @@ function initHeaderFeatures() {
         const userLogin = document.getElementById("user-login");
         const userModel = document.getElementById("user-model");
 
+        const searchresult = document.getElementById("search-result");
+        const searchdropdown = document.querySelector(".search-dropdown");
+
         function closeAll() {
             navMenu?.classList.remove("active");
             dropdownMenu?.classList.remove("show");
             cartModal?.classList.remove("show");
             userModel?.classList.remove("show");
+            searchresult?.classList.add("d-none");
+            searchdropdown?.classList.remove("show");
         }
 
-        // Menu chính
         if (menuIcon && navMenu) {
-            menuIcon.addEventListener("click", function (e) {
+            menuIcon.addEventListener("click", e => {
                 e.stopPropagation();
                 const isActive = navMenu.classList.contains("active");
                 closeAll();
                 if (!isActive) navMenu.classList.add("active");
             });
-            navMenu.addEventListener("click", e => e.stopPropagation());
         }
 
-        // Dropdown
         if (dropdownToggle && dropdownMenu) {
-            dropdownToggle.addEventListener("click", function (e) {
+            dropdownToggle.addEventListener("click", e => {
                 e.stopPropagation();
                 const isShow = dropdownMenu.classList.contains("show");
                 closeAll();
                 if (!isShow) dropdownMenu.classList.add("show");
             });
-            dropdownMenu.addEventListener("click", e => e.stopPropagation());
         }
 
-        // Cart modal
         if (cartIcon && cartModal) {
-            cartIcon.addEventListener("click", function (e) {
+            cartIcon.addEventListener("click", e => {
                 e.stopPropagation();
                 const isShow = cartModal.classList.contains("show");
                 closeAll();
                 if (!isShow) cartModal.classList.add("show");
             });
-            cartModal.addEventListener("click", e => e.stopPropagation());
         }
 
         if (userLogin && userModel) {
-            userLogin.addEventListener("click", function (e) {
+            userLogin.addEventListener("click", e => {
                 e.stopPropagation();
                 const isShow = userModel.classList.contains("show");
                 closeAll();
                 if (!isShow) userModel.classList.add("show");
             });
-            userModel.addEventListener("click", e => e.stopPropagation());
         }
 
-        // Click ngoài đóng hết
         document.addEventListener("click", closeAll);
-    }, 500);
+    }, 300);
 }
 
-function addRemoveItemEvent() {
-    const removeButtons = document.querySelectorAll(".remove");
+/* ================= SEARCH DROPDOWN ================= */
 
-    removeButtons.forEach(button => {
-        button.addEventListener("click", function (e) {
+function initSearchDropdown() {
+    const input = document.getElementById("search-input");
+    const dropdown = document.getElementById("search-result");
+    if (!input || !dropdown) return;
+
+    let timer = null;
+
+    input.addEventListener("input", function () {
+        const keyword = this.value.trim();
+        clearTimeout(timer);
+
+        if (keyword.length < 2) {
+            dropdown.classList.add("d-none");
+            dropdown.innerHTML = "";
+            return;
+        }
+
+        timer = setTimeout(() => {
+            fetch(`/search-thuoc?q=${encodeURIComponent(keyword)}`)
+                .then(res => res.json())
+                .then(data => renderSearchResult(data))
+                .catch(() => {
+                    dropdown.innerHTML =
+                        `<div class="search-empty">Lỗi tìm kiếm</div>`;
+                    dropdown.classList.remove("d-none");
+                });
+        }, 300);
+    });
+
+    function renderSearchResult(items) {
+        if (!items || !items.length) {
+            // dropdown.innerHTML =
+            //     `<div class="search-empty">Không tìm thấy sản phẩm</div>`;
+            dropdown.classList.remove("d-none");
+            return;
+        }
+
+        dropdown.innerHTML = items.map(item => {
+            const gia = item.gia;
+            const giaKM = item.giaKM;
+
+            let priceHtml = "";
+
+            if (giaKM && giaKM != '0' ) {
+                priceHtml = `
+            <div class="price">
+                <span class="original-price">
+                    ${gia} đ
+                </span>
+                <span class="sale-price">
+                    ${giaKM} đ
+                </span>
+            </div>
+        `;
+            } else {
+                priceHtml = `
+            <div class="price">
+                ${gia} đ
+            </div>
+        `;
+            }
+
+            return `
+        <a href="/thuoc/${item.maThuoc}" class="search-item">
+            <img src="${item.hinhAnh}" alt="${item.tenThuoc}">
+            <div class="info">
+                <div class="name">${item.tenThuoc}</div>
+                ${priceHtml}
+            </div>
+        </a>
+    `;
+        }).join("");
+
+
+        dropdown.classList.remove("d-none");
+    }
+}
+
+
+/* ================= CART ================= */
+
+function addRemoveItemEvent() {
+    document.querySelectorAll(".remove").forEach(btn => {
+        btn.addEventListener("click", e => {
             e.stopPropagation();
-            const itemId = this.parentNode.id;
-            removeItem(itemId);
-            updateTotalPrice();
+            const itemId = btn.parentNode.id;
+            document.getElementById(itemId)?.remove();
         });
     });
 }
 
-function removeItem(itemId) {
-    const item = document.getElementById(itemId);
-    if (item) item.remove();
-}
-
-function updateTotalPrice() {
-    // let total = 0;
-    // const cartItems = document.querySelectorAll(".cart-items li");
-
-    // cartItems.forEach(item => {
-    //     const priceText = item.querySelector(".storage-price")?.innerText || "0";
-    //     const price = parseInt(priceText.replace(/\D/g, '')) || 0;
-    //     total += price;
-    // });
-
-    // const totalPriceElement = document.querySelector(".cart-footer p");
-    // if (totalPriceElement) {
-    //     totalPriceElement.innerHTML = `<strong>Tổng:</strong> ${total.toLocaleString()} đ`;
-    // }
-}
+/* ================= PLACEHOLDER TYPING ================= */
 
 function initTypingEffect(inputSelector, placeholders) {
     const input = document.querySelector(inputSelector);
     if (!input) return;
 
-    let placeholderIndex = 0;
-    let charIndex = 0;
-    const typingDelay = 100;
-    const erasingDelay = 60;
-    const newTextDelay = 2000;
+    let pIndex = 0, cIndex = 0;
 
-    function typePlaceholder() {
-        if (charIndex < placeholders[placeholderIndex].length) {
-            input.setAttribute('placeholder', placeholders[placeholderIndex].substring(0, charIndex + 1));
-            charIndex++;
-            setTimeout(typePlaceholder, typingDelay);
+    function type() {
+        if (cIndex < placeholders[pIndex].length) {
+            input.placeholder = placeholders[pIndex].substring(0, ++cIndex);
+            setTimeout(type, 80);
         } else {
-            setTimeout(erasePlaceholder, newTextDelay);
+            setTimeout(erase, 1500);
         }
     }
 
-    function erasePlaceholder() {
-        if (charIndex > 0) {
-            input.setAttribute('placeholder', placeholders[placeholderIndex].substring(0, charIndex - 1));
-            charIndex--;
-            setTimeout(erasePlaceholder, erasingDelay);
+    function erase() {
+        if (cIndex > 0) {
+            input.placeholder = placeholders[pIndex].substring(0, --cIndex);
+            setTimeout(erase, 50);
         } else {
-            placeholderIndex = (placeholderIndex + 1) % placeholders.length;
-            setTimeout(typePlaceholder, typingDelay + 500);
+            pIndex = (pIndex + 1) % placeholders.length;
+            setTimeout(type, 500);
         }
     }
 
-    setTimeout(typePlaceholder, newTextDelay);
+    type();
 }

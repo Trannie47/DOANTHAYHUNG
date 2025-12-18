@@ -51,6 +51,9 @@ Route::post('/pay', [GioHangController::class, 'pay'])->name('cart.pay');
 
 Route::get('/ajax/product/{maThuoc}', [ThuocController::class, 'ajaxGetProduct']);
 
+Route::get('/search-thuoc', [ThuocController::class, 'search']);
+
+
 
 
 

@@ -82,4 +82,35 @@ class ThuocController extends Controller
             'giaKhuyenMai' => $thuoc->giaKhuyenMai,
         ]);
     }
+
+    public function search(Request $request)
+    {
+        $q = trim($request->q);
+
+        if ($q === '') {
+            return response()->json([]);
+        }
+
+        $thuocs = Thuoc::where('isDelete', false)
+            ->where('tenThuoc', 'like', "%$q%")
+            ->limit(8)
+            ->get()
+            ->map(function ($item) {
+
+                // Nếu hinhAnh lưu dạng json
+                $img = is_array($item->HinhAnh)
+                    ? ($item->HinhAnh[0] ?? 'logo.png')
+                    : ($item->HinhAnh ?? 'logo.png');
+
+                return [
+                    'maThuoc' => $item->maThuoc,
+                    'tenThuoc' => $item->tenThuoc,
+                    'gia' => number_format($item->GiaTien),
+                    'giaKM' => number_format($item->giaKhuyenMai),
+                    'hinhAnh' => asset($img),
+                ];
+            });
+
+        return response()->json($thuocs);
+    }
 }
