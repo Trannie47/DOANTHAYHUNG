@@ -135,6 +135,18 @@ class GioHangController extends Controller
             $cart
         ));
 
+        //Kiểm tra tồn kho
+        foreach ($cart as $maThuoc => $item) {
+            $thuoc = Thuoc::where('maThuoc', $maThuoc)->first();
+            if ($thuoc) {
+                if ($thuoc->SoLuongTonKho < $item['soLuong']) {
+                    return back()->with('error', "Sản phẩm {$thuoc->tenThuoc} không đủ tồn kho số lượng còn lại {$thuoc->SoLuongTonKho}!");
+                }
+            } else {
+                return back()->with('error', "Sản phẩm với mã {$maThuoc} không tồn tại!");
+            }
+        }
+
         // Lưu đơn hàng vào database
         Donhang::create([
             'maDonHang'   => $maDon,
@@ -151,7 +163,7 @@ class GioHangController extends Controller
                 'maDonHang' => $maDon,
                 'maThuoc'   => $maThuoc,
                 'SoLuong'   => $item['soLuong'],
-                'SoTien'    => $item['gia'] * $item['soLuong'],
+                'SoTien'    => $item['gia'] ,
             ]);
         }
 
@@ -200,6 +212,18 @@ class GioHangController extends Controller
             $cart
         ));
 
+        //Kiểm tra tồn kho
+        foreach ($cart as $maThuoc => $item) {
+            $thuoc = Thuoc::where('maThuoc', $maThuoc)->first();
+            if ($thuoc) {
+                if ($thuoc->SoLuongTonKho < $item['soLuong']) {
+                    return back()->with('error', "Sản phẩm {$thuoc->tenThuoc} không đủ tồn kho!");
+                }
+            } else {
+                return back()->with('error', "Sản phẩm với mã {$maThuoc} không tồn tại!");
+            }
+        }
+
         // Lưu đơn hàng vào database
         Donhang::create([
             'maDonHang'   => $maDon,
@@ -216,8 +240,16 @@ class GioHangController extends Controller
                 'maDonHang' => $maDon,
                 'maThuoc'   => $maThuoc,
                 'SoLuong'   => $item['soLuong'],
-                'SoTien'    => $item['gia'] * $item['soLuong'],
+                'SoTien'    => $item['gia'],
             ]);
+        }
+
+        // Cập nhật tồn kho
+        foreach ($cart as $maThuoc => $item) {
+            $thuoc = Thuoc::where('maThuoc', $maThuoc)->first();
+            if ($thuoc) {
+                $thuoc->increment('SoLuongTonKho', (-1) * $item['soLuong']);
+            }
         }
 
         // Xóa giỏ hàng sau khi đặt hàng xong
@@ -246,6 +278,11 @@ class GioHangController extends Controller
 
         if (!$thuoc) {
             return back()->with('error', 'Sản phẩm không tồn tại!');
+        }
+
+        // Kiểm tra tồn kho
+        if ($thuoc->SoLuongTonKho < $quantity) {
+            return back()->with('error', "Sản phẩm không đủ tồn kho số lượng chỉ còn {$thuoc->SoLuongTonKho}!");
         }
 
         // Giá bán (ưu tiên giá KM)
@@ -287,8 +324,13 @@ class GioHangController extends Controller
             'maDonHang' => $maDon,
             'maThuoc'   => $thuoc->maThuoc,
             'SoLuong'   => $quantity,
-            'SoTien'    => $giaBan * $quantity,
+            'SoTien'    => $giaBan ,
         ]);
+        // Cập nhật tồn kho
+        $thuoc->increment('SoLuongTonKho',(-1) *  $quantity);
+
+        // Xóa giỏ hàng sau khi đặt hàng xong
+        session()->forget('cart');
 
         return back()->with('success', "Mua ngay thành công! Mã đơn: $maDon");
     }
