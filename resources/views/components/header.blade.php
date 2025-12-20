@@ -38,8 +38,6 @@
                     <i class="fa fa-bars"></i> Danh mục sản phẩm <i class="fa fa-chevron-down"></i>
                 </button>
                 <ul class="dropdown-menu">
-                    <!-- <li><a href="#">Thuốc kê đơn</a></li>
-                    <li><a href="#">Thuốc không kê đơn</a></li> -->
                     @foreach ($loaithuocs as $loaithuoc)
                     <li>
                         <a href="{{ url('/loaithuoc/' . $loaithuoc->maLoai) }}">
@@ -88,7 +86,7 @@
                 <p><strong>Tổng:</strong>{{ formatPrice(array_sum(array_map(fn($item) => $item['gia'] * $item['soLuong'], $cart))) }} </p>
                 <div class="cart-actions">
                     <a href="{{ url('/giohang') }}" class="btn">Xem Giỏ Hàng</a>
-                    <a href="{{ url('/giohang') }}" class="btn">Thanh Toán</a>
+                    <a href="{{ url('/pay') }}" class="btn">Thanh Toán</a>
                 </div>
             </div>
         </div>

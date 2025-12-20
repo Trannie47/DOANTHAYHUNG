@@ -49,6 +49,8 @@ Route::get('/dashboard', [AuthController::class, 'showAdminLogin'])->name('dashb
 
 Route::post('/pay', [GioHangController::class, 'pay'])->name('cart.pay');
 
+Route::get('/pay', [GioHangController::class, 'payNow'])->name('cart.payNow');
+
 Route::get('/ajax/product/{maThuoc}', [ThuocController::class, 'ajaxGetProduct']);
 
 Route::get('/search-thuoc', [ThuocController::class, 'search']);

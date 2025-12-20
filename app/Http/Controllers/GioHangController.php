@@ -162,6 +162,70 @@ class GioHangController extends Controller
             ->with('success', "Đặt hàng thành công! Mã đơn: $maDon");
     }
 
+    public function payNow()
+    {
+        $cart = session('cart', []);
+
+        // Kiểm tra giỏ hàng rỗng
+        if (empty($cart)) {
+            return back()->with('error', 'Giỏ hàng trống!');
+        }
+
+        // Chưa đăng nhập thì không cho thanh toán
+        if (!Auth::guard('khachhang')->check()) {
+            return redirect('/dangnhap')->with('error', 'Bạn cần đăng nhập để thanh toán!');
+        }
+
+        $user = Auth::guard('khachhang')->user(); // Lấy thông tin khách
+
+        // Tạo mã đơn theo ngày: YYYYMMDD + số tăng dần
+        $today = now()->format('Ymd');
+
+        $lastOrder = Donhang::where('ngaydat', $today)
+            ->orderBy('maDonHang', 'DESC')
+            ->first();
+
+        if ($lastOrder) {
+            $lastIndex = (int) substr($lastOrder->maDonHang, -3); // Lấy 3 số cuối
+            $newIndex = str_pad($lastIndex + 1, 3, '0', STR_PAD_LEFT); // Tăng 1
+        } else {
+            $newIndex = "001"; // Đơn đầu tiên trong ngày
+        }
+
+        $maDon = $today . $newIndex; // Ghép mã cuối cùng
+
+        // Tính tổng tiền giỏ hàng
+        $tongTien = array_sum(array_map(
+            fn($item) => $item['gia'] * $item['soLuong'],
+            $cart
+        ));
+
+        // Lưu đơn hàng vào database
+        Donhang::create([
+            'maDonHang'   => $maDon,
+            'ngaydat'     => $today,
+            'tongTien'    => $tongTien,
+            'DiaChi'      => $user->diaChi,
+            'SdtNguoiDat' => $user->sdt,
+            'MaKH'        => $user->maKhachHang ?? null
+        ]);
+
+        // Lưu chi tiết từng sản phẩm của đơn
+        foreach ($cart as $maThuoc => $item) {
+            Chitietdonhang::create([
+                'maDonHang' => $maDon,
+                'maThuoc'   => $maThuoc,
+                'SoLuong'   => $item['soLuong'],
+                'SoTien'    => $item['gia'] * $item['soLuong'],
+            ]);
+        }
+
+        // Xóa giỏ hàng sau khi đặt hàng xong
+        session()->forget('cart');
+
+        return back()->with('success', "Mua ngay thành công! Mã đơn: $maDon");
+    }
+
     public function buyNow(Request $request, $maThuoc)
     {
         // Chưa đăng nhập → chuyển login
