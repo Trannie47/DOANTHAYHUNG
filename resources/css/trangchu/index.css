@@ -324,17 +324,6 @@ body {
     font-weight: bold;
 }
 
-/* Nút */
-.btn-item {
-    width: 100%;
-    margin-top: 10px;
-    padding: 8px 0;
-    background: #0054d6;
-    color: #fff;
-    border-radius: 8px;
-    border: none;
-}
-
 /* Mũi tên */
 .km-arrow {
     display: none;
@@ -378,15 +367,6 @@ body {
     color: #0052cc;
 }
 
-.btn-item {
-    width: 100%;
-    padding: 8px 0;
-    background: #0052cc;
-    color: #fff;
-    border-radius: 8px;
-    margin-top: 10px;
-    border: none;
-}
 .new-left {
     left: 5px !important;       
 }
