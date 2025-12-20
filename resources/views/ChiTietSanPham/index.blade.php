@@ -17,17 +17,17 @@
             <div class="splide__track">
                 <ul class="splide__list">
                     @if(!empty($thuoc->HinhAnh))
-                        @foreach($thuoc->HinhAnh as $hinh)
-                            <li class="splide__slide">
-                                <img src="{{ $hinh }}"
-                                     alt="{{ $thuoc->tenThuoc }} - ảnh {{ $loop->iteration }}"
-                                     loading="lazy">
-                            </li>
-                        @endforeach
+                    @foreach($thuoc->HinhAnh as $hinh)
+                    <li class="splide__slide">
+                        <img src="{{ $hinh }}"
+                            alt="{{ $thuoc->tenThuoc }} - ảnh {{ $loop->iteration }}"
+                            loading="lazy">
+                    </li>
+                    @endforeach
                     @else
-                        <li class="splide__slide">
-                            <span class="badge bg-secondary">Không có hình ảnh</span>
-                        </li>
+                    <li class="splide__slide">
+                        <span class="badge bg-secondary">Không có hình ảnh</span>
+                    </li>
                     @endif
                 </ul>
             </div>
@@ -41,16 +41,16 @@
                 <ul class="splide__list">
 
                     @if (!empty($thuoc->HinhAnh))
-                        @foreach($thuoc->HinhAnh as $hinh)
-                            <li class="splide__slide">
-                                <img src="{{ $hinh }}" 
-                                     alt="{{ $thuoc->tenThuoc }}">
-                            </li>
-                        @endforeach
+                    @foreach($thuoc->HinhAnh as $hinh)
+                    <li class="splide__slide">
+                        <img src="{{ $hinh }}"
+                            alt="{{ $thuoc->tenThuoc }}">
+                    </li>
+                    @endforeach
                     @else
-                        <li class="splide__slide">
-                            <span class="badge bg-secondary">Không ảnh</span>
-                        </li>
+                    <li class="splide__slide">
+                        <span class="badge bg-secondary">Không ảnh</span>
+                    </li>
                     @endif
 
                 </ul>
@@ -73,17 +73,17 @@
 
         {{-- Giá + giảm giá --}}
         @if ($thuoc->giaKhuyenMai)
-            <div class="price">
-                <span class="discount">
-                    -{{ round( (1 - $thuoc->giaKhuyenMai / $thuoc->GiaTien) * 100 ) }}%
-                </span>
-                <span class="old-price">{{ formatPrice($thuoc->GiaTien) }}</span>
-                <span class="current-price">{{ formatPrice($thuoc->giaKhuyenMai) }}/ {{ $thuoc->DVTinh }}</span>
-            </div>
+        <div class="price">
+            <span class="discount">
+                -{{ round( (1 - $thuoc->giaKhuyenMai / $thuoc->GiaTien) * 100 ) }}%
+            </span>
+            <span class="old-price">{{ formatPrice($thuoc->GiaTien) }}</span>
+            <span class="current-price">{{ formatPrice($thuoc->giaKhuyenMai) }}/ {{ $thuoc->DVTinh }}</span>
+        </div>
         @else
-            <div class="price">
-                <span class="current-price">{{ formatPrice($thuoc->GiaTien) }}/ {{ $thuoc->DVTinh }}</span>
-            </div>
+        <div class="price">
+            <span class="current-price">{{ formatPrice($thuoc->GiaTien) }}/ {{ $thuoc->DVTinh }}</span>
+        </div>
         @endif
 
         <p class="price-note">Giá đã bao gồm thuế, phí vận chuyển và các chi phí khác.</p>
@@ -148,55 +148,57 @@
 
 
     {{-- ================= MUA HÀNG ================= --}}
-    <form class="order-section" method="POST" action="{{ route('cart.add', $thuoc->maThuoc) }}">
-        @csrf
+    <div class="order-section">
 
+        <!-- Chọn số lượng (dùng chung) -->
         <div class="quantity-selector">
             <span>Số lượng</span>
             <div class="quantity-input">
                 <div class="quantity-button minus">-</div>
-                <input type="number" value="1" min="1" name="quantity" class="quantity-number">
+                <input type="number" value="1" min="1" id="quantityInput" class="quantity-number">
                 <div class="quantity-button plus">+</div>
             </div>
         </div>
 
+        <!-- Nút mua -->
         <div class="buyer-container">
-            <button class="buy-now-button" type="submit">Mua ngay</button>
-            <button class="add-to-cart-button" type="submit">Thêm vào giỏ</button>
+
+            <!-- Mua ngay (GET) -->
+            <form method="GET" action="{{ route('cart.muaNgay', $thuoc->maThuoc) }}">
+                <input type="hidden" name="quantity" id="quantityBuy">
+                <button type="submit" class="buy-now-button">
+                    Mua ngay
+                </button>
+            </form>
+
+            <!-- Thêm vào giỏ (POST) -->
+            <form method="POST" action="{{ route('cart.add', $thuoc->maThuoc) }}">
+                @csrf
+                <input type="hidden" name="quantity" id="quantityCart">
+                <button type="submit" class="add-to-cart-button">
+                    Thêm vào giỏ
+                </button>
+            </form>
+
         </div>
+    </div>
 
-        <div class="delivery-options">
-            <div class="delivery-item">
-                <i class="fa-solid fa-tablets"></i>
-                <span>Đủ thuốc chuẩn</span>
-            </div>
-            <div class="delivery-item">
-                <i class="fa-solid fa-clock-rotate-left"></i>
-                <span>Giao hàng siêu tốc</span>
-            </div>
-            <div class="delivery-item">
-                <i class="fa-solid fa-truck-fast"></i>
-                <span>Miễn phí vận chuyển</span>
-            </div>
-        </div>
 
-    </form>
 
-</div>
 
-{{-- Chatbox --}}
-<button id="open_chatbox" title="Mở chat"><i class="fa-regular fa-message"></i></button>
-<div id="chatbox" style="display:none;">
-    <button id="close_chatbox" title="Đóng chatbox">×</button>
-    <iframe src="https://www.chatbase.co/chatbot-iframe/iKp1d0Z7u4lW7wMauNcBu" 
+    {{-- Chatbox --}}
+    <button id="open_chatbox" title="Mở chat"><i class="fa-regular fa-message"></i></button>
+    <div id="chatbox" style="display:none;">
+        <button id="close_chatbox" title="Đóng chatbox">×</button>
+        <iframe src="https://www.chatbase.co/chatbot-iframe/iKp1d0Z7u4lW7wMauNcBu"
             width="100%" height="100%" frameborder="0" style="min-height: 500px;">
-    </iframe>
-</div>
+        </iframe>
+    </div>
 
-<button id="backToTop" title="Về đầu trang"><i class="fa-solid fa-angle-up"></i></button>
+    <button id="backToTop" title="Về đầu trang"><i class="fa-solid fa-angle-up"></i></button>
 
-@endsection
+    @endsection
 
-@push('scripts')
-<script src="{{ asset('js/ChiTietSanPham') }}?v={{ time() }}"></script>
-@endpush
+    @push('scripts')
+    <script src="{{ asset('js/ChiTietSanPham') }}?v={{ time() }}"></script>
+    @endpush

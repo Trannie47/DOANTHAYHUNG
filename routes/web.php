@@ -53,6 +53,10 @@ Route::get('/ajax/product/{maThuoc}', [ThuocController::class, 'ajaxGetProduct']
 
 Route::get('/search-thuoc', [ThuocController::class, 'search']);
 
+Route::get('/mua-ngay/{maThuoc}', [GioHangController::class, 'buyNow'])
+    ->name('cart.muaNgay');
+
+
 
 
 

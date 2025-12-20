@@ -102,6 +102,7 @@
                     <p class="old-price">{{ number_format($item->GiaTien) }} đ</p>
                     <p class="price">{{ number_format($item->giaKhuyenMai) }} đ/{{ $item->DVTinh }}</p>
                     @else
+                     <p class="old-price"></p>
                     <p class="price">{{ number_format($item->GiaTien) }} đ/{{ $item->DVTinh }}</p>
                     @endif
 

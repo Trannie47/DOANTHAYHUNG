@@ -161,4 +161,71 @@ class GioHangController extends Controller
         return redirect()->route('cart.index')
             ->with('success', "Đặt hàng thành công! Mã đơn: $maDon");
     }
+
+    public function buyNow(Request $request, $maThuoc)
+    {
+        // Chưa đăng nhập → chuyển login
+        if (!Auth::guard('khachhang')->check()) {
+            return redirect('/dangnhap')
+                ->with('error', 'Bạn cần đăng nhập để mua hàng!');
+        }
+
+        $user = Auth::guard('khachhang')->user();
+
+        // Lấy số lượng (mặc định = 1)
+        $quantity = max(1, (int) $request->query('quantity', 1));
+
+        // Lấy thuốc
+        $thuoc = Thuoc::where('maThuoc', $maThuoc)
+            ->where('isDelete', false)
+            ->first();
+
+        if (!$thuoc) {
+            return back()->with('error', 'Sản phẩm không tồn tại!');
+        }
+
+        // Giá bán (ưu tiên giá KM)
+        $giaBan = $thuoc->giaKhuyenMai && $thuoc->giaKhuyenMai > 0
+            ? $thuoc->giaKhuyenMai
+            : $thuoc->GiaTien;
+
+        // Tạo mã đơn hàng: YYYYMMDD + số tăng
+        $today = now()->format('Ymd');
+
+        $lastOrder = Donhang::where('ngaydat', $today)
+            ->orderBy('maDonHang', 'DESC')
+            ->first();
+
+        if ($lastOrder) {
+            $lastIndex = (int) substr($lastOrder->maDonHang, -3);
+            $newIndex = str_pad($lastIndex + 1, 3, '0', STR_PAD_LEFT);
+        } else {
+            $newIndex = '001';
+        }
+
+        $maDon = $today . $newIndex;
+
+        // Tổng tiền
+        $tongTien = $giaBan * $quantity;
+
+        // Lưu đơn hàng
+        Donhang::create([
+            'maDonHang'   => $maDon,
+            'ngaydat'     => $today,
+            'tongTien'    => $tongTien,
+            'DiaChi'      => $user->diaChi,
+            'SdtNguoiDat' => $user->sdt,
+            'MaKH'        => $user->maKhachHang ?? null
+        ]);
+
+        // Lưu chi tiết đơn
+        Chitietdonhang::create([
+            'maDonHang' => $maDon,
+            'maThuoc'   => $thuoc->maThuoc,
+            'SoLuong'   => $quantity,
+            'SoTien'    => $giaBan * $quantity,
+        ]);
+
+        return back()->with('success', "Mua ngay thành công! Mã đơn: $maDon");
+    }
 }
