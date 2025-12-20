@@ -81,7 +81,10 @@
     @foreach ($data as $item)
         <tr>
             <td>{{ $item->maDonHang }}</td>
-            <td>{{ $item->ngaydat }}</td>
+            <td>
+                {{ date('d/m/Y', strtotime($item->ngaydat)) }}
+
+            </td>
 
             <td>
                 @php 

@@ -201,8 +201,8 @@ class AuthController extends Controller
         $dsThuocSapHetHang = Thuoc::where('isDelete', false)
             ->where('SoLuongTonKho', '<=', 50)
             ->orderBy('SoLuongTonKho', 'asc')
-            ->get();    
-        
+            ->get();
+
         return view('dashboard.index', compact(
             'labels',
             'data',
@@ -229,5 +229,57 @@ class AuthController extends Controller
 
         // Trả về trang đăng nhập
         return redirect('/dangnhap')->with('success', 'Bạn đã đăng xuất thành công!');
+    }
+
+    //hiên thị trang thông tin cá nhân
+    public function showUpdateProfile()
+    {
+        $user = Auth::guard('khachhang')->user();
+        return view('CapNhatThongTinTK.index', compact('user'));
+    }
+
+    // Cập nhật thông tin cá nhân
+    public function updateProfile(Request $request)
+    {
+        $user = Auth::guard('khachhang')->user();
+        // Validate dữ liệu nhập vào
+        $data = $request->validate([
+            'email'    => 'required|email',
+            'ten'      => 'required|string|max:255',
+            'dateBorn' => 'required|integer|min:1900|max:2099',
+            'address'  => 'required|string|max:255',
+        ]);
+
+        // Cập nhật thông tin
+        $khachhang = Khachhang::where('sdt', $user->sdt)->first();
+
+        $khachhang->update($data);
+        return back()->with('success', 'Cập nhật thông tin cá nhân thành công!');
+    }
+
+    // Cập nhât mật khẩu
+    public function updatePassword(Request $request)
+    {
+        $user = Auth::guard('khachhang')->user();
+        // Validate dữ liệu nhập vào
+        $data = $request->validate([
+            'current_password' => 'required|string',
+            'new_password' => 'required|string|min:6|confirmed', // cần new_password_confirmation
+        ]);
+        // Kiểm tra mật khẩu hiện tại
+        if (!Hash::check($data['current_password'], $user->matKhau)) {
+            return back()->with('error', 'Mật khẩu hiện tại không đúng!');
+        }
+        // Cập nhật mật khẩu mới
+        $khachhang = Khachhang::where('sdt', $user->sdt)->first();
+        $khachhang->matKhau = Hash::make($data['new_password']);
+        $khachhang->save();
+        return back()->with('success', 'Cập nhật mật khẩu thành công!');
+    }
+
+    // Hiển thị trang cập nhật mật khẩu
+    public function showUpdatePassword()
+    {
+        return view('CapNhatMatKhau.index');
     }
 }

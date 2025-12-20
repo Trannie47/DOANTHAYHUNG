@@ -58,6 +58,21 @@ Route::get('/search-thuoc', [ThuocController::class, 'search']);
 Route::get('/mua-ngay/{maThuoc}', [GioHangController::class, 'buyNow'])
     ->name('cart.muaNgay');
 
+// Hiển thị trang thông tin cá nhân
+Route::get('/capnhatthongtincanhan', [AuthController::class, 'showUpdateProfile'])
+    ->name('updateprofile.show');
+
+Route::put('/capnhatthongtincanhan', [AuthController::class, 'updateProfile'])
+    ->name('updateprofile.update');
+
+// hiển thị cập nhật mật khẩu
+Route::get('/doimatkhau', [AuthController::class, 'showUpdatePassword'])
+    ->name('updatepassword.show');
+
+Route::put('/doimatkhau', [AuthController::class, 'updatePassword'])
+    ->name('updatepassword.update');
+
+
 
 
 

@@ -49,7 +49,7 @@
             </div>
             <ul class="menu-bar">
                 <li><a href="{{ url('/trangchu') }}"><i class="fa-solid fa-home"></i> Trang chủ</a></li>
-                <li><a href="#">Tin tức</a></li>
+                <!-- <li><a href="#">Tin tức</a></li> -->
                 <li><a href="{{ url('/lienhe') }}">Liên lạc</a></li>
                 <li><a href="{{ url('/gioithieu') }}">Giới thiệu</a></li>
 
@@ -95,8 +95,8 @@
         @if(Auth::guard('khachhang')->check())
         <div id="user-model" class="user-model">
             <ul>
-                <li><a href="#">Đổi thông tin cá nhân</a></li>
-                <li><a href="#">Đổi mật khẩu</a></li>
+                <li><a href="{{ url('/capnhatthongtincanhan') }}">Đổi thông tin cá nhân</a></li>
+                <li><a href="{{ url('/doimatkhau') }}">Đổi mật khẩu</a></li>
                 <li>
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
