@@ -56,7 +56,8 @@
             @else
             <p class="price">{{ formatPrice($thuoc->GiaTien) }}/ {{$thuoc->DVTinh}}</p>
             @endif
-            <button class="btn-item">
+            <button class="btn-item"
+                data-id="{{ $thuoc->maThuoc }}">
                 <p>Chọn sản phẩm</p>
             </button>
         </a>
