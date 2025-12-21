@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Thuoc;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class ThuocController extends Controller
 {
@@ -26,18 +27,34 @@ class ThuocController extends Controller
     }
 
     // Lấy danh sách thuốc theo mã loại
-    public function getByLoai($id)
+    public function getByLoai(Request $request, $id)
     {
-        $thuocs = Thuoc::where('maLoai', $id)
-            ->where('isDelete', false)
-            ->get(); // lấy tất cả thuốc thuộc loại này
+        $query = Thuoc::where('maLoai', $id)
+            ->where('isDelete', false);
 
-        if (!$thuocs) {
+        // 🔥 LỌC THEO NSX (NẾU CÓ)
+        if ($request->filled('nsx')) {
+            $nsx = explode(',', $request->nsx);
+            $query->whereIn('NSX', $nsx);
+        }
+
+        // 🔥 PHÂN TRANG ĐÚNG THEO KẾT QUẢ LỌC
+        $thuocs = $query->paginate(15)->withQueryString();
+
+        if ($thuocs->isEmpty()) {
             abort(404, 'Sản phẩm không tồn tại');
         }
 
-        return view('LoaiThuoc.index', compact('thuocs'));
+        // 🔥 DANH SÁCH NSX (KHÔNG LỌC – ĐỂ SIDEBAR)
+        $DsNSX = Thuoc::where('maLoai', $id)
+            ->where('isDelete', false)
+            ->select('NSX', DB::raw('COUNT(*) as total'))
+            ->groupBy('NSX')
+            ->get();
+
+        return view('LoaiThuoc.index', compact('thuocs', 'DsNSX'));
     }
+
 
     // Lấy dữ liệu cho trang chủ
     public function getTrangChu()

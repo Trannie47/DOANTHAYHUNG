@@ -13,25 +13,24 @@
 <div class="type-container">
     <div class="sidebar">
         <div>
-            <h2>Loại</h2>
-            <ul>
-                <li><input type="checkbox" /> Thuốc kháng sinh</li>
-                <li><input type="checkbox" /> Vitamin</li>
-                <li><input type="checkbox" /> Thuốc ngừ thai</li>
-                <li><input type="checkbox" /> Thuốc kháng viêm</li>
-                <li><input type="checkbox" /> Thuốc giảm cân</li>
-                <li><input type="checkbox" /> Thuốc Mắt/Tai/Mũi</li>
-                <li><input type="checkbox" /> Thuốc tiêu hóa</li>
-            </ul>
-        </div>
-        <div>
-
             <h2>Thương hiệu</h2>
             <ul>
-                <li><input type="checkbox" /> Abbot</li>
-                <li><input type="checkbox" /> Bayer HealthCare</li>
-                <li><input type="checkbox" /> Foripharm (TW3)</li>
+                @php
+                $selectedNSX = request('nsx') ? explode(',', request('nsx')) : [];
+                @endphp
+
+                @foreach ($DsNSX as $item)
+                <li>
+                    <input type="checkbox"
+                        class="brand-filter"
+                        value="{{ $item->NSX }}"
+                        {{ in_array($item->NSX, $selectedNSX) ? 'checked' : '' }}>
+                    {{ $item->NSX }} 
+                </li>
+                @endforeach
+
             </ul>
+
         </div>
     </div>
 
@@ -42,7 +41,7 @@
         $firstImage = is_array($thuoc->HinhAnh) ? ($thuoc->HinhAnh[0] ?? 'logo.png') : 'logo.png';
         @endphp
 
-        <a class="product-card" href="{{ url('/thuoc/' .$thuoc->maThuoc ) }}">
+        <a class="product-card" href="{{ url('/thuoc/' .$thuoc->maThuoc ) }}" data-brand="{{ strtolower(trim($thuoc->NSX)) }}">
             @if ($thuoc->getThumbnailImage())
             <img src="{{ $thuoc->getThumbnailImage() }}"
                 alt="{{ $thuoc->tenThuoc }}">
@@ -64,18 +63,22 @@
         @endforeach
 
     </div>
-</div>
-<<!-- Chatbox -->
-    <button id="open_chatbox" title="Mở chat"><i class="fa-regular fa-message"></i></button>
-    <div id="chatbox" style="display:none;">
-        <button id="close_chatbox" title="Đóng chatbox">×</button>
-        <iframe src="https://www.chatbase.co/chatbot-iframe/iKp1d0Z7u4lW7wMauNcBu" width="100%" height="100%" frameborder="0" style="min-height: 500px;"></iframe>
+
+    <div class="pagination-container">
+        {{ $thuocs->links('pagination::bootstrap-4') }}
     </div>
+</div>
+<!-- Chatbox -->
+<button id="open_chatbox" title="Mở chat"><i class="fa-regular fa-message"></i></button>
+<div id="chatbox" style="display:none;">
+    <button id="close_chatbox" title="Đóng chatbox">×</button>
+    <iframe src="https://www.chatbase.co/chatbot-iframe/iKp1d0Z7u4lW7wMauNcBu" width="100%" height="100%" frameborder="0" style="min-height: 500px;"></iframe>
+</div>
 
-    <button id="backToTop" title="Về đầu trang"><i class="fa-solid fa-angle-up"></i></button>
+<button id="backToTop" title="Về đầu trang"><i class="fa-solid fa-angle-up"></i></button>
 
-    @endsection
+@endsection
 
-    @push('scripts')
-
-    @endpush
+@push('scripts')
+<script src="{{ asset('js/LoaiThuoc') }}?v={{ time() }}"></script>
+@endpush

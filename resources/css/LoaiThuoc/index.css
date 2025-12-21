@@ -62,7 +62,7 @@
 
 .product-card img {
   max-width: 100%;
-  height: auto;
+  height: 15rem; 
   border-radius: 0.5rem;
   margin-bottom: 0.625rem;
 }
@@ -102,6 +102,45 @@
   color: red;
   font-weight: bold;
 }
+
+.pagination-container {
+  width: 100%;
+  margin: 2rem 0;
+  display: flex;
+  justify-content: center;
+}
+
+.pagination {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.pagination li {
+  list-style: none;
+}
+
+.pagination li a,
+.pagination li span {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 0.5rem;
+  text-decoration: none;
+  color: #333;
+  font-size: 14px;
+}
+
+.pagination li.active span {
+  background-color: #73c6d9;
+  color: #fff;
+  border-color: #73c6d9;
+}
+
+.pagination li.disabled span {
+  color: #aaa;
+}
+
+
 
 @media (max-width: 920px) and (min-width: 768px) {
 
