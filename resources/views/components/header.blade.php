@@ -97,6 +97,10 @@
             <ul>
                 <li><a href="{{ url('/capnhatthongtincanhan') }}">Đổi thông tin cá nhân</a></li>
                 <li><a href="{{ url('/doimatkhau') }}">Đổi mật khẩu</a></li>
+                <!-- nếu là admin thì hiện link quản trị -->
+                @if(Auth::guard('khachhang')->user()->isAdmin)
+                <li><a href="{{ url('/dashboard') }}">Quản trị</a></li>
+                @endif
                 <li>
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
