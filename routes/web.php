@@ -168,4 +168,11 @@ Route::prefix('dashboard')->name('admin.')->group(function () {
     });
 
     Route::post('/dangxuatadmin', [AuthController::class, 'adminLogout'])->name('logoutadmin');
+
+    // Đổi mật khẩu admin
+    Route::get('/admin/changePassword', [AuthController::class, 'showChangePasswordAddmin'])
+        ->name('password.edit');
+
+    Route::post('/admin/changePassword', [AuthController::class, 'updatePasswordAdmin'])
+        ->name('password.update');
 });
