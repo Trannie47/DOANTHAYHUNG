@@ -282,4 +282,30 @@ class AuthController extends Controller
     {
         return view('CapNhatMatKhau.index');
     }
+
+    // Hiển thị trang đổi mật khẩu admin
+    public function showChangePasswordAddmin()
+    {
+        return view('admin.CapNhatMatKhau.index');
+    }
+    // Xử lý đổi mật khẩu admin
+    public function updatePasswordAdmin(Request $request)
+    {
+        // Validate dữ liệu nhập vào
+        $data = $request->validate([
+            'current_password' => 'required|string',
+            'new_password' => 'required|string|min:6|confirmed', // cần new_password_confirmation
+        ]);
+        // Lấy admin hiện tại
+        $admin = Auth::guard('khachhang')->user();
+        // Kiểm tra mật khẩu hiện tại
+        if (!Hash::check($data['current_password'], $admin->matKhau)) {
+            return back()->with('error', 'Mật khẩu hiện tại không đúng!');
+        }
+        // Cập nhật mật khẩu mới
+        $adminUser = Khachhang::where('sdt', $admin->sdt)->first();
+        $adminUser->matKhau = Hash::make($data['new_password']);
+        $adminUser->save();
+        return back()->with('success', 'Cập nhật mật khẩu thành công!');
+    }
 }
