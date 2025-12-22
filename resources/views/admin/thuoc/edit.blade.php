@@ -205,71 +205,98 @@
 
             {{-- Cột phải: Ảnh sản phẩm --}}
             <div class="col-md-4">
-                <div class="card sticky-top" style="top: 20px;">
-                    <div class="card-header bg-info text-white">
-                        <h5 class="mb-0">Ảnh Sản Phẩm</h5>
-                    </div>
-                    <div class="card-body">
-                        {{-- Ảnh hiện tại --}}
-                        @if ($thuoc->HinhAnh && is_array($thuoc->HinhAnh) && count($thuoc->HinhAnh) > 0)
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">Ảnh Hiện Tại</label>
-                            <div id="currentImages">
-                                @foreach ($thuoc->HinhAnh as $index => $image)
-                                <div class="position-relative mb-2" id="image-{{ $index }}">
-                                    <img src="{{ $image }}" alt="Product" class="img-thumbnail w-100">
-                                    <div class="d-flex gap-2 mt-2">
-                                        <button type="button" class="btn btn-sm btn-danger flex-grow-1"
-                                            onclick="deleteImage('{{ $image }}', {{ $index }})">
-                                            <i class="fas fa-trash"></i> Xóa
-                                        </button>
-                                        <button type="button" class="btn btn-sm btn-secondary"
-                                            onclick="downloadImage('{{ $image }}')">
-                                            <i class="fas fa-download"></i>
-                                        </button>
+
+                {{-- WRAPPER STICKY --}}
+                <div class="position-sticky" style="top: 5rem;">
+
+                    {{-- CARD ẢNH --}}
+                    <div class="card mb-3">
+                        <div class="card-header bg-info text-white">
+                            <h5 class="mb-0">Ảnh Sản Phẩm</h5>
+                        </div>
+
+                        <div class="card-body">
+
+                            {{-- Ảnh hiện tại --}}
+                            @if ($thuoc->HinhAnh && is_array($thuoc->HinhAnh) && count($thuoc->HinhAnh) > 0)
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Ảnh Hiện Tại</label>
+
+                                <div id="currentImages">
+                                    @foreach ($thuoc->HinhAnh as $index => $image)
+                                    <div class="position-relative mb-2" id="image-{{ $index }}">
+                                        <img src="{{ $image }}" alt="Product"
+                                            class="img-thumbnail w-100">
+
+                                        <div class="d-flex gap-2 mt-2">
+                                            <button type="button"
+                                                class="btn btn-sm btn-danger flex-grow-1"
+                                                onclick="deleteImage('{{ $image }}', {{ $index }})">
+                                                <i class="fas fa-trash"></i> Xóa
+                                            </button>
+
+                                            <button type="button"
+                                                class="btn btn-sm btn-secondary"
+                                                onclick="downloadImage('{{ $image }}')">
+                                                <i class="fas fa-download"></i>
+                                            </button>
+                                        </div>
+
+                                        <input type="hidden"
+                                            name="delete_images[]"
+                                            id="delete-{{ $index }}"
+                                            class="delete-image-input">
                                     </div>
-                                    <input type="hidden" name="delete_images[]" id="delete-{{ $index }}"
-                                        class="delete-image-input">
+                                    @endforeach
                                 </div>
-                                @endforeach
                             </div>
-                        </div>
-                        @else
-                        <div class="alert alert-warning mb-3">
-                            <i class="fas fa-warning"></i> Chưa có ảnh
-                        </div>
-                        @endif
+                            @else
+                            <div class="alert alert-warning mb-3">
+                                <i class="fas fa-warning"></i> Chưa có ảnh
+                            </div>
+                            @endif
 
-                        {{-- Upload ảnh mới --}}
-                        <hr>
-                        <div>
-                            <label class="form-label fw-bold">Thêm Ảnh Mới</label>
-                            <input type="file" class="form-control @error('HinhAnh') is-invalid @enderror"
-                                name="HinhAnh[]" multiple accept="image/*" id="imageInput">
-                            <small class="text-muted d-block mt-2">
-                                <i class="fas fa-info-circle"></i> JPG, PNG, GIF (Max 2MB/ảnh)
-                            </small>
-                            @error('HinhAnh')
-                            <div class="invalid-feedback d-block">{{ $message }}</div>
-                            @enderror
-                        </div>
+                            {{-- Upload ảnh mới --}}
+                            <hr>
 
-                        <div id="imagePreview" class="mt-3">
-                            {{-- Preview ảnh mới sẽ hiển thị ở đây --}}
+                            <div>
+                                <label class="form-label fw-bold">Thêm Ảnh Mới</label>
+                                <input type="file"
+                                    class="form-control @error('HinhAnh') is-invalid @enderror"
+                                    name="HinhAnh[]"
+                                    multiple
+                                    accept="image/*"
+                                    id="imageInput">
+
+                                <small class="text-muted d-block mt-2">
+                                    <i class="fas fa-info-circle"></i> JPG, PNG, GIF (Max 2MB/ảnh)
+                                </small>
+
+                                @error('HinhAnh')
+                                <div class="invalid-feedback d-block">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div id="imagePreview" class="mt-3"></div>
                         </div>
                     </div>
-                </div>
 
-                {{-- Nút hành động --}}
-                <div class="mt-3">
-                    <button type="submit" class="btn btn-success w-100 mb-2">
-                        <i class="fas fa-save"></i> Lưu Thay Đổi
-                    </button>
-                    <a href="{{ route('admin.thuoc.index') }}" class="btn btn-secondary w-100">
-                        <i class="fas fa-arrow-left"></i> Quay Lại
-                    </a>
+                    {{-- CARD NÚT HÀNH ĐỘNG --}}
+                    <div class="card">
+                        <div class="card-body">
+                            <button type="submit" class="btn btn-success w-100 mb-2">
+                                <i class="fas fa-save"></i> Lưu Thay Đổi
+                            </button>
+
+                            <a href="{{ route('admin.thuoc.index') }}" class="btn btn-secondary w-100">
+                                <i class="fas fa-arrow-left"></i> Quay Lại
+                            </a>
+                        </div>
+                    </div>
+
                 </div>
             </div>
+
         </div>
     </form>
 </div>

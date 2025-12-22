@@ -201,39 +201,54 @@
 
             {{-- Cột phải: Upload ảnh --}}
             <div class="col-md-4">
-                <div class="card sticky-top" style="top: 20px;">
-                    <div class="card-header bg-info text-white">
-                        <h5 class="mb-0">Ảnh Sản Phẩm</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="mb-3">
-                            <label class="form-label">Tải Lên Ảnh</label>
-                            <input type="file" class="form-control @error('HinhAnh') is-invalid @enderror"
-                                name="HinhAnh[]" multiple accept="image/*" id="imageInput">
-                            <small class="text-muted d-block mt-2">
-                                <i class="fas fa-info-circle"></i> Hỗ trợ: JPG, PNG, GIF (Max 2MB/ảnh)
-                            </small>
-                            @error('HinhAnh')
-                            <div class="invalid-feedback d-block">{{ $message }}</div>
-                            @enderror
-                        </div>
 
-                        <div id="imagePreview" class="mt-3">
-                            {{-- Preview ảnh sẽ hiển thị ở đây --}}
+                {{-- WRAPPER STICKY --}}
+                <div class="position-sticky" style="top: 5rem;">
+
+                    {{-- Ảnh sản phẩm --}}
+                    <div class="card mb-3">
+                        <div class="card-header bg-info text-white">
+                            <h5 class="mb-0">Ảnh Sản Phẩm</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label class="form-label">Tải Lên Ảnh</label>
+                                <input type="file"
+                                    class="form-control @error('HinhAnh') is-invalid @enderror"
+                                    name="HinhAnh[]"
+                                    multiple
+                                    accept="image/*"
+                                    id="imageInput">
+
+                                <small class="text-muted d-block mt-2">
+                                    <i class="fas fa-info-circle"></i> Hỗ trợ: JPG, PNG, GIF (Max 2MB/ảnh)
+                                </small>
+
+                                @error('HinhAnh')
+                                <div class="invalid-feedback d-block">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div id="imagePreview" class="mt-3"></div>
                         </div>
                     </div>
-                </div>
 
-                {{-- Nút hành động --}}
-                <div class="mt-3">
-                    <button type="submit" class="btn btn-success w-100 mb-2">
-                        <i class="fas fa-save"></i> Lưu Thuốc
-                    </button>
-                    <a href="{{ route('admin.thuoc.index') }}" class="btn btn-secondary w-100">
-                        <i class="fas fa-arrow-left"></i> Quay Lại
-                    </a>
+                    {{-- Nút hành động --}}
+                    <div class="card">
+                        <div class="card-body">
+                            <button type="submit" class="btn btn-success w-100 mb-2">
+                                <i class="fas fa-save"></i> Lưu Thuốc
+                            </button>
+
+                            <a href="{{ route('admin.thuoc.index') }}" class="btn btn-secondary w-100">
+                                <i class="fas fa-arrow-left"></i> Quay Lại
+                            </a>
+                        </div>
+                    </div>
+
                 </div>
             </div>
+
         </div>
     </form>
 </div>
