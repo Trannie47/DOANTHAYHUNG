@@ -36,11 +36,6 @@
                 </div>
 
                 <div class="input-container">
-                    <label class="label-container" for="Address">Địa Chỉ</label>
-                    <input type="text" id="Address" name="address" placeholder="Address" required>
-                </div>
-
-                <div class="input-container">
                     <label class="label-container" for="password">Mật khẩu</label>
                     <input type="password" id="password" name="password" required>
                 </div>

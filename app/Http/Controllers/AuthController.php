@@ -29,7 +29,6 @@ class AuthController extends Controller
             'email' => 'nullable|email|unique:khachhang,email', // email có thể để trống
             'name' => 'required|string|min:3',
             'dateBorn' => 'required|string',
-            'address' => 'required|string|min:3',
             'password' => 'required|min:6|confirmed', // cần password_confirmation
         ]);
 
@@ -39,7 +38,6 @@ class AuthController extends Controller
             'ten' => $data['name'],
             'email' => $data['email'] ?? null,
             'namsinh' => $data['dateBorn'],
-            'diaChi' => $data['address'],
             'matKhau' => Hash::make($data['password']), // mã hoá mật khẩu
             'GhiChu' => null
         ]);
