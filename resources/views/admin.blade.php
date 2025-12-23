@@ -12,60 +12,23 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/css/admin">
 
-    {{-- FLASH MESSAGE CSS (GIỐNG FRONTEND) --}}
-    <style>
-        .admin-alert {
-            padding: 12px 20px;
-            border-radius: 6px;
-            position: fixed;
-            top: 80px;        /* dưới topbar */
-            right: 20px;
-            z-index: 9999;
-            color: #fff;
-            font-weight: 600;
-            min-width: 260px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-            animation: fadeIn 0.3s ease-out;
-        }
-
-        .admin-alert-success {
-            background: #28a745;
-        }
-
-        .admin-alert-error {
-            background: #dc3545;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-    </style>
 </head>
 
 <body id="page-top" class="bg-light">
-
     {{-- FLASH MESSAGE --}}
     @if (session('success'))
-        <div class="admin-alert admin-alert-success" id="admin-alert">
-            <i class="fas fa-check-circle me-2"></i>
-            {{ session('success') }}
-        </div>
+    <div class="admin-alert admin-alert-success" id="admin-alert">
+        <i class="fas fa-check-circle me-2"></i>
+        {{ session('success') }}
+    </div>
     @endif
 
     @if (session('error'))
-        <div class="admin-alert admin-alert-error" id="admin-alert">
-            <i class="fas fa-times-circle me-2"></i>
-            {{ session('error') }}
-        </div>
+    <div class="admin-alert admin-alert-error" id="admin-alert">
+        <i class="fas fa-times-circle me-2"></i>
+        {{ session('error') }}
+    </div>
     @endif
-
     <div class="d-flex">
 
         <!-- Sidebar -->
@@ -77,45 +40,56 @@
                 </div>
                 <hr class="bg-white opacity-25">
 
-                <div class="nav flex-column nav-pills">
-                    <a class="nav-link text-white active" href="{{ route('dashboard.index') }}">
-                        <i class="fas fa-tachometer-alt me-2"></i>Bảng điều khiển
-                    </a>
+                <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist">
+                    <a class="nav-link text-white active" href="{{ route('dashboard.index') }}"><i class="fas fa-tachometer-alt me-2"></i>Bảng điều khiển</a>
 
                     <hr class="bg-white opacity-25">
 
                     <div class="text-white-50 small text-uppercase mb-2 ps-3">Quản lý thuốc</div>
 
-                    <button class="btn text-white text-start w-100 mb-1"
-                            data-bs-toggle="collapse"
-                            data-bs-target="#collapseThuoc">
-                        <i class="fas fa-capsules me-2"></i>
-                        Quản lý thuốc
-                        <i class="fas fa-chevron-down float-end"></i>
+                    <!-- Quản lý thuốc -->
+                    <button class="btn text-white text-start w-100 mb-1" data-bs-toggle="collapse" data-bs-target="#collapseThuoc">
+                        <i class="fas fa-capsules me-2"></i>Quản lý thuốc <i class="fas fa-chevron-down float-end"></i>
                     </button>
-
                     <div class="collapse" id="collapseThuoc">
                         <div class="donthuoc-menu ms-4 me-3">
-                            <a class="donthuoc-item" href="{{ route('admin.thuoc.index') }}">Danh sách thuốc</a>
-                            <a class="donthuoc-item" href="{{ route('admin.thuoc.create') }}">Thêm thuốc</a>
-                            <a class="donthuoc-item" href="{{ route('admin.loaithuoc.index') }}">Loại thuốc</a>
+
+                            <a class="donthuoc-item" href="{{ route('admin.thuoc.index') }}">
+                                Danh sách thuốc
+                            </a>
+
+                            <a class="donthuoc-item" href="{{ route('admin.thuoc.create') }}">
+                                Thêm thuốc
+                            </a>
+
+                            <a class="donthuoc-item" href="{{ route('admin.loaithuoc.index') }}">
+                                Loại thuốc
+                            </a>
+
                         </div>
                     </div>
 
-                    <button class="btn text-white text-start w-100 mb-1"
-                            data-bs-toggle="collapse"
-                            data-bs-target="#collapseDonThuoc">
-                        <i class="fas fa-file-medical me-2"></i>
-                        Quản lý đơn thuốc
-                        <i class="fas fa-chevron-down float-end"></i>
+                    <!-- Quản lý đơn thuốc -->
+                    <button class="btn text-white text-start w-100 mb-1" data-bs-toggle="collapse" data-bs-target="#collapseDonThuoc">
+                        <i class="fas fa-file-medical me-2"></i>Quản lý đơn thuốc <i class="fas fa-chevron-down float-end"></i>
                     </button>
 
                     <div class="collapse" id="collapseDonThuoc">
                         <div class="donthuoc-menu ms-4 me-3">
-                            <a class="donthuoc-item" href="{{ route('admin.donhang.index') }}">Trạng thái đơn hàng</a>
-                            <a class="donthuoc-item" href="{{ route('admin.donhang.lichsu') }}">Lịch sử đơn thuốc</a>
+
+                            <!-- Trang chung -->
+                            <a class="donthuoc-item" href="{{ route('admin.donhang.index') }}">
+                                Trạng thái đơn hàng
+                            </a>
+
+                            <a class="donthuoc-item" href="{{ route('admin.donhang.lichsu') }}">
+                                Lịch sử đơn thuốc
+                            </a>
+
                         </div>
                     </div>
+
+
 
                     <hr class="bg-white opacity-25">
 
@@ -128,10 +102,9 @@
                     <a class="nav-link text-white" href="{{ route('admin.password.edit') }}">
                         <i class="fas fa-key me-2"></i>Đổi mật khẩu
                     </a>
-
                     <a class="nav-link text-white"
-                       onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                        <i class="fas fa-sign-out-alt me-2"></i>Đăng xuất
+                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                        <i class="fas fa-sign-out-alt me-2"></i> Đăng xuất
                     </a>
 
                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
@@ -147,12 +120,14 @@
             <!-- Topbar -->
             <nav class="navbar navbar-light bg-white shadow sticky-top">
                 <div class="container-fluid">
+                    <button class="btn d-md-none" data-bs-toggle="offcanvas" data-bs-target="#offcanvasSidebar">
+                        <i class="fas fa-bars"></i>
+                    </button>
+
                     <form class="d-none d-md-flex ms-3">
                         <div class="input-group">
                             <input type="text" class="form-control border-0 bg-light" placeholder="Tìm kiếm...">
-                            <button class="btn btn-primary">
-                                <i class="fas fa-search"></i>
-                            </button>
+                            <button class="btn btn-primary"><i class="fas fa-search"></i></button>
                         </div>
                     </form>
 
@@ -161,6 +136,28 @@
                             <img src="https://via.placeholder.com/40" class="rounded-circle me-2" width="40">
                             <span class="d-none d-lg-inline">Admin</span>
                         </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li>
+                                <a class="dropdown-item" href="{{ route('admin.password.edit') }}">
+                                    <i class="fas fa-key me-2"></i>Đổi mật khẩu
+                                </a>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li>
+                                <a class="dropdown-item"
+                                    href="#"
+                                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                    <i class="fas fa-sign-out-alt me-2"></i> Đăng xuất
+                                </a>
+
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                    @csrf
+                                </form>
+                            </li>
+
+                        </ul>
                     </div>
                 </div>
             </nav>
@@ -168,13 +165,25 @@
             <!-- Nội dung chính -->
             <div class="container-fluid py-4">
                 @yield('content')
+
             </div>
+
+
+        </div>
+    </div>
+
+
+    <div class="offcanvas offcanvas-start bg-primary text-white" tabindex="-1" id="offcanvasSidebar" style="width:280px;">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title">Admin Thuốc</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
+        </div>
+        <div class="offcanvas-body p-0">
 
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
     {{-- AUTO HIDE FLASH --}}
     <script>
         setTimeout(() => {
@@ -186,7 +195,7 @@
             }
         }, 3000);
     </script>
-
     @yield('scripts')
 </body>
+
 </html>
