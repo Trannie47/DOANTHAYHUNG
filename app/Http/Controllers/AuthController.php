@@ -26,12 +26,15 @@ class AuthController extends Controller
         try {
 
             $data = $request->validate([
-                'phone' => 'required|string',
-                'email' => 'nullable|email',
-                'name' => 'required|string',
-                'dateBorn' => 'required|string',
-                'password' => 'required|min:6|confirmed',
+                'phone'     => 'required|string|unique:khachhang,sdt',
+                'email'     => 'nullable|email',
+                'name'      => 'required|string',
+                'dateBorn'  => 'required|string',
+                'password'  => 'required|min:6|confirmed',
+            ], [
+                'phone.unique' => 'Số điện thoại đã tồn tại!',
             ]);
+
 
             $khachhang = Khachhang::create([
                 'sdt' => $data['phone'],
@@ -47,7 +50,7 @@ class AuthController extends Controller
             return redirect('/trangchu')
                 ->with('success', 'Đăng ký thành công!');
         } catch (\Exception $e) {
-            dd($e->getMessage());
+            return back()->with('error', $e->getMessage());
         }
     }
 
