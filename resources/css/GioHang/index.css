@@ -1,3 +1,4 @@
+/* ================== CONTAINER ================== */
 .storage-container {
   max-width: 90rem;
   width: 100%;
@@ -9,6 +10,7 @@
   margin-top: 14rem;
 }
 
+/* ================== PAGE LAYOUT ================== */
 .cart-page {
   display: flex;
   flex-wrap: wrap;
@@ -16,7 +18,7 @@
   padding: 20px;
 }
 
-/* Cart Table */
+/* ================== CART TABLE ================== */
 .shoping__cart__table {
   flex: 1 1 65%;
   display: flex;
@@ -24,7 +26,7 @@
   gap: 10px;
 }
 
-/* Header & Row - Cùng cột */
+/* ================== HEADER & ROW ================== */
 .cart__header,
 .cart__row {
   display: grid;
@@ -33,18 +35,39 @@
   gap: 10px;
   padding: 12px 10px;
   border-bottom: 1px solid #ccc;
+  min-height: 100px;
 }
 
+/* Header */
 .cart__header {
   font-weight: bold;
   background-color: #f9f9f9;
   border-radius: 6px;
+  text-align: center;
 }
 
+/* Header cột sản phẩm căn trái */
+.cart__header > div:first-child {
+  text-align: left;
+}
+
+/* ================== COLUMNS ================== */
+.cart__row > .cart__col {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Riêng cột sản phẩm */
+.cart__product {
+  justify-content: flex-start;
+}
+
+/* ================== PRODUCT ================== */
 .cart__item {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
 }
 
 .cart__item img {
@@ -57,7 +80,18 @@
   font-weight: 500;
 }
 
-/* Quantity Box */
+/* ================== PRICE & TOTAL ================== */
+.cart__price,
+.cart__total {
+  font-weight: 500;
+  text-align: center;
+}
+
+/* ================== QUANTITY ================== */
+.cart__quantity {
+  justify-content: center;
+}
+
 .quantity {
   display: flex;
   align-items: center;
@@ -66,6 +100,7 @@
 
 .pro-qty {
   display: flex;
+  align-items: center;
   border: 1px solid #ccc;
   border-radius: 5px;
   overflow: hidden;
@@ -74,22 +109,32 @@
 .pro-qty .dec,
 .pro-qty .inc {
   background-color: #eee;
-  padding: 5px 10px;
+  padding: 6px 12px;
   cursor: pointer;
   user-select: none;
+  border: none;
 }
 
 .quantity-input {
   width: 5rem;
   text-align: center;
-  padding: 5px;
+  padding: 6px;
   border: none;
   background: white;
 }
 
-/* Remove Icon */
+/* ================== REMOVE ================== */
 .cart__remove {
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.remove-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
 }
 
 .icon_close::before {
@@ -98,8 +143,6 @@
   content: "\f00d";
   color: #888;
   font-size: 18px;
-  cursor: pointer;
-  display: inline-block;
   transition: color 0.2s ease;
 }
 
@@ -107,7 +150,7 @@
   color: red;
 }
 
-/* Order Summary */
+/* ================== ORDER SUMMARY ================== */
 .order-summary {
   flex: 1 1 30%;
   border-top: 1px solid #ccc;
@@ -120,63 +163,10 @@
 .order-summary h2 {
   margin-bottom: 1rem;
   font-size: 1.2rem;
+  text-align: center;
 }
 
-.total {
-  font-size: 1.2rem;
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 1rem;
-}
-
-.checkout-btn {
-  background-color: #000;
-  color: #fff;
-  border: none;
-  padding: 10px 20px;
-  cursor: pointer;
-  border-radius: 4px;
-  width: 100%;
-  transition: background-color 0.2s ease;
-}
-
-.checkout-btn:hover {
-  background-color: #333;
-}
-
-.cart__header .image-placeholder {
-  width: 80px;
-  height: 1px;
-  visibility: hidden;
-}
-
-.remove-btn {
-    background: none;     
-    border: none;        
-    color: #ff0000;     
-    font-size: 18px;   
-    cursor: pointer;      
-    padding: 0;
-    line-height: 1;
-}
-.remove-btn:hover {
-    color: #cc0000;       
-}
-
-/* Address box */
-/* Thông tin giao hàng */
-.address-box {
-  margin-bottom: 1.2rem;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.address-box label {
-  font-weight: 600;
-  font-size: 0.95rem;
-}
-
+/* ================== ADDRESS ================== */
 .address-input,
 .address-textarea {
   width: 100%;
@@ -198,11 +188,38 @@
   resize: none;
 }
 
+/* ================== TOTAL ================== */
+.total {
+  font-size: 1.2rem;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
 
+/* ================== CHECKOUT ================== */
+.checkout-btn {
+  background-color: #000;
+  color: #fff;
+  border: none;
+  padding: 12px 20px;
+  cursor: pointer;
+  border-radius: 4px;
+  width: 100%;
+  transition: background-color 0.2s ease;
+}
 
+.checkout-btn:hover {
+  background-color: #333;
+}
 
+/* ================== HEADER PLACEHOLDER ================== */
+.cart__header .image-placeholder {
+  width: 80px;
+  height: 1px;
+  visibility: hidden;
+}
 
-/* Responsive */
+/* ================== RESPONSIVE ================== */
 @media (max-width: 768px) {
   .cart-page {
     flex-direction: column;
@@ -218,6 +235,10 @@
     text-align: center;
   }
 
+  .cart__product {
+    justify-content: center;
+  }
+
   .cart__item {
     flex-direction: column;
     justify-content: center;
@@ -227,7 +248,6 @@
   .cart__quantity,
   .cart__total,
   .cart__remove {
-    display: flex;
     justify-content: center;
     margin-top: 5px;
   }
