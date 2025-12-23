@@ -18,7 +18,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @property string|null $email
  * @property string $namsinh
  * @property string|null $GhiChu
- * @property string $diaChi
+ * @property string|null $diaChi
  * @property string $matKhau
  * @property bool $isAdmin
  * 

@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $DiaChi
  * @property string $SdtNguoiDat
  * @property int $trangthai
+ * @property string $SdtNguoiNhan
  * 
  * @property Khachhang $khachhang
  * @property Collection|Chitietdonhang[] $chitietdonhangs
@@ -41,7 +42,8 @@ class Donhang extends Model
 		'tongTien',
 		'DiaChi',
 		'SdtNguoiDat',
-		'trangthai'
+		'trangthai',
+		'SdtNguoiNhan'
 	];
 
 	public function khachhang()

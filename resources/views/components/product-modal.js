@@ -101,10 +101,24 @@ document.addEventListener('DOMContentLoaded', function () {
     if (buyNowBtn) {
       buyNowBtn.onclick = function (e) {
         e.preventDefault();
+
+        // đồng bộ số lượng
         const q = Math.max(1, parseInt(qtyInput.value || 1));
-        window.location.href =
-          '/mua-ngay/' + encodeURIComponent(product.maThuoc) + '?quantity=' + q;
+        qtyHidden.value = q;
+
+        // thêm flag để backend biết là "mua ngay"
+        let buyNowInput = addCartForm.querySelector('input[name="buy_now"]');
+        if (!buyNowInput) {
+          buyNowInput = document.createElement('input');
+          buyNowInput.type = 'hidden';
+          buyNowInput.name = 'buy_now';
+          buyNowInput.value = '1';
+          addCartForm.appendChild(buyNowInput);
+        }
+
+        addCartForm.submit();
       };
+
     }
 
     // Hiện modal

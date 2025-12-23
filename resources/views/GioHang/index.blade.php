@@ -72,16 +72,46 @@
 
         <!-- RIGHT: Order Summary -->
         <div class="order-summary">
-            <h2>Thông tin đơn hàng1</h2>
-            <div class="total">
-                <span>Tổng tiền:</span>
-                <strong>{{ formatPrice(array_sum(array_map(fn($item) => $item['gia'] * $item['soLuong'], $cart))) }}</strong>
-            </div>
+            <h2>Thông tin đơn hàng</h2>
+
             <form action="{{ route('cart.pay') }}" method="POST">
                 @csrf
-                <button type="submit" class="checkout-btn">Thanh toán</button>
+
+                {{-- Số điện thoại --}}
+                <label for="phone">Số điện thoại người nhận</label>
+                <input
+                    type="tel"
+                    name="phone"
+                    id="phone"
+                    class="address-input"
+                    placeholder="Nhập số điện thoại"
+                    pattern="[0-9]{10}"
+                    required>
+                
+                {{-- Địa chỉ --}}
+                <label for="address_detail">Địa chỉ giao hàng</label>
+                <textarea
+                    name="address_detail"
+                    class="address-textarea"
+                    rows="3"
+                    placeholder="Nhập địa chỉ chi tiết..."
+                    required></textarea>
+
+                {{-- Tổng tiền --}}
+                <div class="total">
+                    <span>Tổng tiền:</span>
+                    <strong>
+                        {{ formatPrice(array_sum(array_map(fn($item) => $item['gia'] * $item['soLuong'], $cart))) }}
+                    </strong>
+                </div>
+
+                {{-- Thanh toán --}}
+                <button type="submit" class="checkout-btn">
+                    Thanh toán
+                </button>
             </form>
         </div>
+
     </div>
 </div>
 

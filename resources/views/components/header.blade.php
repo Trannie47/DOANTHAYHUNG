@@ -86,7 +86,6 @@
                 <p><strong>Tổng:</strong>{{ formatPrice(array_sum(array_map(fn($item) => $item['gia'] * $item['soLuong'], $cart))) }} </p>
                 <div class="cart-actions">
                     <a href="{{ url('/giohang') }}" class="btn">Xem Giỏ Hàng</a>
-                    <a href="{{ url('/pay') }}" class="btn">Thanh Toán</a>
                 </div>
             </div>
         </div>

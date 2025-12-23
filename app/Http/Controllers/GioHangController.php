@@ -46,6 +46,10 @@ class GioHangController extends Controller
 
         // Lưu lại vào session
         session()->put('cart', $cart);
+        // nếu là mua ngay → sang giỏ hàng
+        if ($request->has('buy_now')) {
+            return redirect('/giohang');
+        }
 
         return back()->with('success', 'Thêm vào giỏ hàng thành công!');
     }
@@ -97,200 +101,27 @@ class GioHangController extends Controller
     }
 
     // Thanh toán giỏ hàng
-    public function pay()
+    public function pay(Request $request)
     {
+        // Validate dữ liệu từ form
+        $request->validate([
+            'phone' => 'required|regex:/^[0-9]{10}$/',
+            'address_detail' => 'required|string',
+        ]);
+
         $cart = session('cart', []);
 
-        // Kiểm tra giỏ hàng rỗng
         if (empty($cart)) {
             return back()->with('error', 'Giỏ hàng trống!');
         }
 
-        // Chưa đăng nhập thì không cho thanh toán
         if (!Auth::guard('khachhang')->check()) {
             return redirect('/dangnhap')->with('error', 'Bạn cần đăng nhập để thanh toán!');
-        }
-
-        $user = Auth::guard('khachhang')->user(); // Lấy thông tin khách
-
-        // Tạo mã đơn theo ngày: YYYYMMDD + số tăng dần
-        $today = now()->format('Ymd');
-
-        $lastOrder = Donhang::where('ngaydat', $today)
-            ->orderBy('maDonHang', 'DESC')
-            ->first();
-
-        if ($lastOrder) {
-            $lastIndex = (int) substr($lastOrder->maDonHang, -3); // Lấy 3 số cuối
-            $newIndex = str_pad($lastIndex + 1, 3, '0', STR_PAD_LEFT); // Tăng 1
-        } else {
-            $newIndex = "001"; // Đơn đầu tiên trong ngày
-        }
-
-        $maDon = $today . $newIndex; // Ghép mã cuối cùng
-
-        // Tính tổng tiền giỏ hàng
-        $tongTien = array_sum(array_map(
-            fn($item) => $item['gia'] * $item['soLuong'],
-            $cart
-        ));
-
-        //Kiểm tra tồn kho
-        foreach ($cart as $maThuoc => $item) {
-            $thuoc = Thuoc::where('maThuoc', $maThuoc)->first();
-            if ($thuoc) {
-                if ($thuoc->SoLuongTonKho < $item['soLuong']) {
-                    return back()->with('error', "Sản phẩm {$thuoc->tenThuoc} không đủ tồn kho số lượng còn lại {$thuoc->SoLuongTonKho}!");
-                }
-            } else {
-                return back()->with('error', "Sản phẩm với mã {$maThuoc} không tồn tại!");
-            }
-        }
-
-        // Lưu đơn hàng vào database
-        Donhang::create([
-            'maDonHang'   => $maDon,
-            'ngaydat'     => $today,
-            'tongTien'    => $tongTien,
-            'DiaChi'      => $user->diaChi,
-            'SdtNguoiDat' => $user->sdt,
-            'MaKH'        => $user->maKhachHang ?? null
-        ]);
-
-        // Lưu chi tiết từng sản phẩm của đơn
-        foreach ($cart as $maThuoc => $item) {
-            Chitietdonhang::create([
-                'maDonHang' => $maDon,
-                'maThuoc'   => $maThuoc,
-                'SoLuong'   => $item['soLuong'],
-                'SoTien'    => $item['gia'] ,
-            ]);
-        }
-
-        // Xóa giỏ hàng sau khi đặt hàng xong
-        session()->forget('cart');
-
-        return redirect()->route('cart.index')
-            ->with('success', "Đặt hàng thành công! Mã đơn: $maDon");
-    }
-
-    public function payNow()
-    {
-        $cart = session('cart', []);
-
-        // Kiểm tra giỏ hàng rỗng
-        if (empty($cart)) {
-            return back()->with('error', 'Giỏ hàng trống!');
-        }
-
-        // Chưa đăng nhập thì không cho thanh toán
-        if (!Auth::guard('khachhang')->check()) {
-            return redirect('/dangnhap')->with('error', 'Bạn cần đăng nhập để thanh toán!');
-        }
-
-        $user = Auth::guard('khachhang')->user(); // Lấy thông tin khách
-
-        // Tạo mã đơn theo ngày: YYYYMMDD + số tăng dần
-        $today = now()->format('Ymd');
-
-        $lastOrder = Donhang::where('ngaydat', $today)
-            ->orderBy('maDonHang', 'DESC')
-            ->first();
-
-        if ($lastOrder) {
-            $lastIndex = (int) substr($lastOrder->maDonHang, -3); // Lấy 3 số cuối
-            $newIndex = str_pad($lastIndex + 1, 3, '0', STR_PAD_LEFT); // Tăng 1
-        } else {
-            $newIndex = "001"; // Đơn đầu tiên trong ngày
-        }
-
-        $maDon = $today . $newIndex; // Ghép mã cuối cùng
-
-        // Tính tổng tiền giỏ hàng
-        $tongTien = array_sum(array_map(
-            fn($item) => $item['gia'] * $item['soLuong'],
-            $cart
-        ));
-
-        //Kiểm tra tồn kho
-        foreach ($cart as $maThuoc => $item) {
-            $thuoc = Thuoc::where('maThuoc', $maThuoc)->first();
-            if ($thuoc) {
-                if ($thuoc->SoLuongTonKho < $item['soLuong']) {
-                    return back()->with('error', "Sản phẩm {$thuoc->tenThuoc} không đủ tồn kho!");
-                }
-            } else {
-                return back()->with('error', "Sản phẩm với mã {$maThuoc} không tồn tại!");
-            }
-        }
-
-        // Lưu đơn hàng vào database
-        Donhang::create([
-            'maDonHang'   => $maDon,
-            'ngaydat'     => $today,
-            'tongTien'    => $tongTien,
-            'DiaChi'      => $user->diaChi,
-            'SdtNguoiDat' => $user->sdt,
-            'MaKH'        => $user->maKhachHang ?? null
-        ]);
-
-        // Lưu chi tiết từng sản phẩm của đơn
-        foreach ($cart as $maThuoc => $item) {
-            Chitietdonhang::create([
-                'maDonHang' => $maDon,
-                'maThuoc'   => $maThuoc,
-                'SoLuong'   => $item['soLuong'],
-                'SoTien'    => $item['gia'],
-            ]);
-        }
-
-        // Cập nhật tồn kho
-        foreach ($cart as $maThuoc => $item) {
-            $thuoc = Thuoc::where('maThuoc', $maThuoc)->first();
-            if ($thuoc) {
-                $thuoc->increment('SoLuongTonKho', (-1) * $item['soLuong']);
-            }
-        }
-
-        // Xóa giỏ hàng sau khi đặt hàng xong
-        session()->forget('cart');
-
-        return back()->with('success', "Mua ngay thành công! Mã đơn: $maDon");
-    }
-
-    public function buyNow(Request $request, $maThuoc)
-    {
-        // Chưa đăng nhập → chuyển login
-        if (!Auth::guard('khachhang')->check()) {
-            return redirect('/dangnhap')
-                ->with('error', 'Bạn cần đăng nhập để mua hàng!');
         }
 
         $user = Auth::guard('khachhang')->user();
 
-        // Lấy số lượng (mặc định = 1)
-        $quantity = max(1, (int) $request->query('quantity', 1));
-
-        // Lấy thuốc
-        $thuoc = Thuoc::where('maThuoc', $maThuoc)
-            ->where('isDelete', false)
-            ->first();
-
-        if (!$thuoc) {
-            return back()->with('error', 'Sản phẩm không tồn tại!');
-        }
-
-        // Kiểm tra tồn kho
-        if ($thuoc->SoLuongTonKho < $quantity) {
-            return back()->with('error', "Sản phẩm không đủ tồn kho số lượng chỉ còn {$thuoc->SoLuongTonKho}!");
-        }
-
-        // Giá bán (ưu tiên giá KM)
-        $giaBan = $thuoc->giaKhuyenMai && $thuoc->giaKhuyenMai > 0
-            ? $thuoc->giaKhuyenMai
-            : $thuoc->GiaTien;
-
-        // Tạo mã đơn hàng: YYYYMMDD + số tăng
+        // ===== TẠO MÃ ĐƠN =====
         $today = now()->format('Ymd');
 
         $lastOrder = Donhang::where('ngaydat', $today)
@@ -306,32 +137,60 @@ class GioHangController extends Controller
 
         $maDon = $today . $newIndex;
 
-        // Tổng tiền
-        $tongTien = $giaBan * $quantity;
+        // ===== TÍNH TỔNG TIỀN =====
+        $tongTien = array_sum(array_map(
+            fn($item) => $item['gia'] * $item['soLuong'],
+            $cart
+        ));
 
-        // Lưu đơn hàng
+        // ===== KIỂM TRA TỒN KHO =====
+        foreach ($cart as $maThuoc => $item) {
+            $thuoc = Thuoc::where('maThuoc', $maThuoc)->first();
+
+            if (!$thuoc) {
+                return back()->with('error', "Sản phẩm $maThuoc không tồn tại!");
+            }
+
+            if ($thuoc->SoLuongTonKho < $item['soLuong']) {
+                return back()->with(
+                    'error',
+                    "Sản phẩm {$thuoc->tenThuoc} chỉ còn {$thuoc->SoLuongTonKho} trong kho!"
+                );
+            }
+        }
+
+        // ===== LƯU ĐƠN HÀNG =====
         Donhang::create([
-            'maDonHang'   => $maDon,
-            'ngaydat'     => $today,
-            'tongTien'    => $tongTien,
-            'DiaChi'      => $user->diaChi,
-            'SdtNguoiDat' => $user->sdt,
-            'MaKH'        => $user->maKhachHang ?? null
+            'maDonHang'     => $maDon,
+            'ngaydat'       => $today,
+            'tongTien'      => $tongTien,
+            'DiaChi'        => $request->address_detail,
+            'SdtNguoiDat'   => $user->sdt,
+            'SdtNguoiNhan'  => $request->phone,
+            'trangthai'     => 0,
+            'MaKH'          => $user->maKhachHang ?? null,
         ]);
 
-        // Lưu chi tiết đơn
-        Chitietdonhang::create([
-            'maDonHang' => $maDon,
-            'maThuoc'   => $thuoc->maThuoc,
-            'SoLuong'   => $quantity,
-            'SoTien'    => $giaBan ,
-        ]);
-        // Cập nhật tồn kho
-        $thuoc->increment('SoLuongTonKho',(-1) *  $quantity);
+        // ===== LƯU CHI TIẾT ĐƠN =====
+        foreach ($cart as $maThuoc => $item) {
+            Chitietdonhang::create([
+                'maDonHang' => $maDon,
+                'maThuoc'   => $maThuoc,
+                'SoLuong'   => $item['soLuong'],
+                'SoTien'    => $item['gia'],
+            ]);
 
-        // Xóa giỏ hàng sau khi đặt hàng xong
+            // Trừ tồn kho
+            Thuoc::where('maThuoc', $maThuoc)->decrement(
+                'SoLuongTonKho',
+                $item['soLuong']
+            );
+        }
+
+        // ===== XÓA GIỎ =====
         session()->forget('cart');
 
-        return back()->with('success', "Mua ngay thành công! Mã đơn: $maDon");
+        return redirect()->route('cart.index')
+            ->with('success', "Đặt hàng thành công! Mã đơn: $maDon");
     }
 }

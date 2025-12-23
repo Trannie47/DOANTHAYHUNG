@@ -163,6 +163,42 @@
     color: #cc0000;       
 }
 
+/* Address box */
+/* Thông tin giao hàng */
+.address-box {
+  margin-bottom: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.address-box label {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.address-input,
+.address-textarea {
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 0.95rem;
+  outline: none;
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.address-input:focus,
+.address-textarea:focus {
+  border-color: #000;
+}
+
+.address-textarea {
+  resize: none;
+}
+
+
 
 
 

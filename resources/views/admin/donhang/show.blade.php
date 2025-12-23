@@ -8,8 +8,8 @@
     <p><b>Ngày đặt:</b> {{ $don->ngaydat }}</p>
     <p><b>Người đặt:</b> {{ $don->khachhang->ten ?? 'Không rõ' }}</p>
     <p><b>Địa chỉ:</b> {{ $don->DiaChi }}</p>
-    <p><b>SĐT:</b> {{ $don->SdtNguoiDat }}</p>
-
+    <p><b>SĐT người đặt:</b> {{ $don->SdtNguoiDat }}</p>
+    <p><b>SĐT Người nhận:</b> {{ $don->SdtNguoiNhan }}</p>
     <h4 class="mt-4">Sản phẩm đã mua</h4>
 
     <table class="table table-bordered text-center">

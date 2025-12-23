@@ -23,31 +23,35 @@ class AuthController extends Controller
     // Xử lý đăng ký tài khoản
     public function register(Request $request)
     {
-        // Validate dữ liệu từ form
-        $data = $request->validate([
-            'phone' => 'required|string|unique:khachhang,sdt', // sdt không trùng
-            'email' => 'nullable|email|unique:khachhang,email', // email có thể để trống
-            'name' => 'required|string|min:3',
-            'dateBorn' => 'required|string',
-            'password' => 'required|min:6|confirmed', // cần password_confirmation
-        ]);
+        try {
 
-        // Tạo khách hàng mới trong database
-        $khachhang = Khachhang::create([
-            'sdt' => $data['phone'],
-            'ten' => $data['name'],
-            'email' => $data['email'] ?? null,
-            'namsinh' => $data['dateBorn'],
-            'matKhau' => Hash::make($data['password']), // mã hoá mật khẩu
-            'GhiChu' => null
-        ]);
+            $data = $request->validate([
+                'phone' => 'required|string',
+                'email' => 'nullable|email',
+                'name' => 'required|string',
+                'dateBorn' => 'required|string',
+                'password' => 'required|min:6|confirmed',
+            ]);
 
-        // Tự động đăng nhập khách hàng vừa đăng ký
-        Auth::guard('khachhang')->login($khachhang);
+            $khachhang = Khachhang::create([
+                'sdt' => $data['phone'],
+                'ten' => $data['name'],
+                'email' => $data['email'] ?? null,
+                'namsinh' => $data['dateBorn'],
+                'matKhau' => Hash::make($data['password']),
+                'isAdmin' => 0
+            ]);
 
-        // Chuyển hướng về trang chủ kèm thông báo
-        return redirect('/trangchu')->with('success', 'Đăng ký thành công, bạn đã được đăng nhập!');
+            Auth::guard('khachhang')->login($khachhang);
+
+            return redirect('/trangchu')
+                ->with('success', 'Đăng ký thành công!');
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+        }
     }
+
+
 
     // Hiển thị trang đăng nhập
     public function showLogin()
