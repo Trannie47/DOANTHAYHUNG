@@ -13,8 +13,8 @@ class ThuocController extends Controller
     public function show($id)
     {
         // Lấy thuốc + join loại thuốc để lấy tên loại
-        $thuoc = Thuoc::join('loaithuoc', 'thuoc.maLoai', '=', 'Loaithuoc.maLoai')
-            ->select('thuoc.*', 'Loaithuoc.tenLoai') // thêm trường tên loại
+        $thuoc = Thuoc::join('loaithuoc', 'thuoc.maLoai', '=', 'loaithuoc.maLoai')
+            ->select('thuoc.*', 'loaithuoc.tenLoai') // thêm trường tên loại
             ->where('thuoc.isDelete', false) // chỉ lấy thuốc chưa bị xóa
             ->where('thuoc.maThuoc', $id)
             ->firstOrFail(); // không thấy thì báo lỗi 404
