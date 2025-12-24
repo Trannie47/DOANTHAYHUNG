@@ -115,14 +115,17 @@ class AuthController extends Controller
     //Dăng nhâp admin
     public function showAdminLogin()
     {
+        //Kiểm tra có phải addmin không 
+        if ( Auth::guard('khachhang')->user()->isAdmin == false) {
+            return redirect('/trangchu');
+        } 
+
         // Cards
         $SLLoaiThuoc = Loaithuoc::where('isDelete', false)->count();
 
         $SLThuoc = Thuoc::where('isDelete', false)->count();
 
         $SLDonHangTrongNgay = Donhang::whereDate('NgayDat', today())->count();
-
-
 
         // Chart: đơn thuốc theo tháng (năm hiện tại)
         $donThuocTheoThang = Thuoc::where('thuoc.isDelete', false)
