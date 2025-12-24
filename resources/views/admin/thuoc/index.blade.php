@@ -66,7 +66,7 @@
                             <th width="200">Tên Thuốc</th>
                             <th width="100">Loại</th>
                             <th width="100">Giá Tiền</th>
-                            <th width="80">Giá GM</th>
+                            <th width="80">Giá KM</th>
                             <th width="80">ĐVT</th>
                             <th width="150" class="text-center">Hành Động</th>
                         </tr>
