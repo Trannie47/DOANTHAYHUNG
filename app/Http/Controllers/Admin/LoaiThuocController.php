@@ -51,7 +51,9 @@ class LoaiThuocController extends Controller
      */
     public function edit($id)
     {
-        $loaithuoc = Loaithuoc::findOrFail($id)->where('isDelete', false)->first();
+        $loaithuoc = Loaithuoc::where('maLoai', $id)
+            ->where('isDelete', false)
+            ->firstOrFail();
 
         return view('admin.loaithuoc.edit', compact('loaithuoc'));
     }
@@ -61,7 +63,9 @@ class LoaiThuocController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $loaithuoc = Loaithuoc::findOrFail($id)->where('isDelete', false)->first();
+        $loaithuoc = Loaithuoc::where('maLoai', $id)
+            ->where('isDelete', false)
+            ->firstOrFail();
 
         $validated = $request->validate([
             'TenLoai' => 'required|string|max:255|unique:loaithuoc,TenLoai,' . $id . ',maLoai',
@@ -74,28 +78,31 @@ class LoaiThuocController extends Controller
             ->with('success', 'Cập nhật loại thuốc thành công!');
     }
 
+
     /**
      * Xóa (soft delete) loại thuốc
      */
     public function destroy($id)
     {
-        $loaithuoc = Loaithuoc::findOrFail($id)->where('isDelete', false)->first();
-        $thuocs = Thuoc::where('maLoai', $id)->where('isDelete', false)->count();
+        $loaithuoc = Loaithuoc::where('maLoai', $id)
+            ->where('isDelete', false)
+            ->firstOrFail();
+
+        $thuocs = Thuoc::where('maLoai', $id)
+            ->where('isDelete', false)
+            ->count();
+
         if ($thuocs > 0) {
             return redirect()->route('admin.loaithuoc.index')
                 ->with('error', 'Không thể xóa loại thuốc này vì còn thuốc thuộc loại này.');
-        }    
-        try {
-            $loaithuoc->update(['isDelete' => true]);
-
-            return redirect()->route('admin.loaithuoc.index')
-                ->with('success', 'Xóa loại thuốc thành công!');
-        } catch (\Throwable $e) {
-            Log::error('Failed to delete Loaithuoc id=' . $id . ' - ' . $e->getMessage());
-            return redirect()->route('admin.loaithuoc.index')
-                ->with('error', 'Đã xảy ra lỗi khi xóa loại thuốc.');
         }
+
+        $loaithuoc->update(['isDelete' => true]);
+
+        return redirect()->route('admin.loaithuoc.index')
+            ->with('success', 'Xóa loại thuốc thành công!');
     }
+
 
     /**
      * API: Thêm loại thuốc nhanh (Quick add)
