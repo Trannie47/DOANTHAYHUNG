@@ -45,7 +45,7 @@ class ThuocController extends Controller
             abort(404, 'Sản phẩm không tồn tại');
         }
 
-        // 🔥 DANH SÁCH NSX (KHÔNG LỌC – ĐỂ SIDEBAR)
+        //  DANH SÁCH NSX (KHÔNG LỌC – ĐỂ SIDEBAR)
         $DsNSX = Thuoc::where('maLoai', $id)
             ->where('isDelete', false)
             ->select('NSX', DB::raw('COUNT(*) as total'))
