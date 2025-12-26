@@ -38,7 +38,7 @@ class ThuocController extends Controller
             $query->whereIn('NSX', $nsx);
         }
 
-        // 🔥 PHÂN TRANG ĐÚNG THEO KẾT QUẢ LỌC
+        // PHÂN TRANG ĐÚNG THEO KẾT QUẢ LỌC
         $thuocs = $query->paginate(15)->withQueryString();
 
         if ($thuocs->isEmpty()) {
